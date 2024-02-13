@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/black">
+<item
+    android:id="@+id/abal"
+    android:title="Account Balance"
+    >
+</item>
+    <item
+        android:id="@+id/ex_history"
+        android:title="Expense History"
+        >
+    </item>
+    <item
+        android:id="@+id/charts"
+        android:title="Charts"
+        >
+    </item>
+    <item
+        android:id="@+id/budget_goal"
+        android:title="Budget and Goals"
+        >
+    </item>
+    <item
+        android:id="@+id/plnd_payment"
+        android:title="Planned Payments"
+        >
+    </item><item
+    android:id="@+id/fut_predict"
+    android:title="Future Predictions"
+    >
+</item>
+
+</menu>

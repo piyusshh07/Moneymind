@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MoneyMind" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#09B1FD</item>
+        <item name="colorPrimaryVariant">#09B1FD</item>
+        <item name="colorOnPrimary">#09B1FD</item>
+        <item name="colorPrimaryDark">#0977FD</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#09B1FD</item>
+        <item name="colorSecondaryVariant">#09B1FD</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="buttonStyle">@color/blue</item>
+
+    </style>
+    <style name="Theme.actionbar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- Primary brand color. -->
+    <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">#080A0B</item>
+    <!-- Secondary brand color. -->
+    <item name="colorSecondary">#0A0C0C</item>
+    <!-- Status bar color. -->
+    <item name="buttonStyle">@color/blue</item>
+    </style>
+
+    <style name="Theme.splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#09B1FD</item>
+        <!-- Status bar color. -->
+        <item name="buttonStyle">@color/blue</item>
+    </style>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MoneyMind" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#09B1FD</item>
+        <item name="colorPrimaryVariant">#09B1FD</item>
+        <item name="colorOnPrimary">#09B1FD</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#09B1FD</item>
+        <item name="colorSecondaryVariant">#09B1FD</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+
+    </style>
+</resources>
