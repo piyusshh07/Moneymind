@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter account name"
+        android:inputType="text"
         android:padding="15dp"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="@+id/account_name_textview"
@@ -61,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter initial amount"
-
+        android:inputType="number"
         android:padding="15dp"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="@+id/initial_amount_textview"

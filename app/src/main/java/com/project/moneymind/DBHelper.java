@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME="Logins.db";
-    public static final int version = 2;
+    public static final int version = 3;
     //user login
     public static final String userid = "Userid";
     public static final String username = "Username";
@@ -51,8 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String create_acc_table = ("Create table " + Acc_table + "("
                 + Acc_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Acc_user_id + " INTEGER ,"
-                + Acc_name + " TEXT NOT NULL, "
-                + Acc_balance + " REAL NOT NULL," +
+                + Acc_name + " TEXT , " +
                 " FOREIGN KEY (" + Acc_user_id + ") REFERENCES " + usertable + "(" + userid + ") )");
         // userdb.execSQL("Create table expense_records(expense_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,Expense_category TEXT NOT NULL,amount REAL NOT NULL,date TEXT NOT NULL,description TEXT NOT NULL ,FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
         // userdb.execSQL("Create table Budgets(budget_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,budget_name TEXT NOT NULL, total_amount REAL NOT NULL,start_date TEXT NOT NULL,end_date TEXT NOT NULL, FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
@@ -125,7 +124,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase userdb = this.getWritableDatabase();
 
         String[] selectionargs = {String.valueOf(user_id)};
-        Cursor cursor = userdb.rawQuery(" select " + Acc_name + " from " + Acc_table + " where " + userid + "=?", selectionargs);
+        Cursor cursor = userdb.rawQuery(" select " + Acc_name + " from " + Acc_table + " where " + Acc_user_id + "=?", selectionargs);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -140,18 +139,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return acc_names;
     }
 
-    public long CreateAccount(int userID, String accountName) {
+    public long CreateAccount(Integer userID, String accountName) {
         SQLiteDatabase userdb = this.getWritableDatabase();
         ContentValues Values = new ContentValues();
-        Values.put(userid, userID);
+        Values.put(Acc_user_id , userID);
         Values.put(Acc_name, accountName);
         return userdb.insert(Acc_table, null, Values);
+
     }
 
-    public int get_account_id(String acc_name, int userid) {
+    public int get_account_id(String acc_name, int user_id) {
         int acc_id = -1;
         SQLiteDatabase db = this.getWritableDatabase();
-        String u_id = String.valueOf(userid);
+        String u_id = String.valueOf(user_id);
 
         Cursor cursor = db.rawQuery("SELECT " + Acc_id + "  FROM " + Acc_table + " WHERE " + Acc_name + "=?" + " AND " + Acc_user_id + "=?", new String[]{acc_name, u_id});
 
@@ -169,7 +169,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean checkAccountname(String Accountname, int userid) {
         SQLiteDatabase userdb = this.getWritableDatabase();
-        Cursor cursor = userdb.rawQuery("SELECT * FROM " + Acc_table + " WHERE " + Acc_name + "=? And " + Acc_user_id + "=?", new String[]{Accountname, String.valueOf(userid)});
+        String uid=String.valueOf(userid);
+        Cursor cursor = userdb.rawQuery("SELECT * FROM " + Acc_table + " WHERE " + Acc_name + "=? And " + Acc_user_id + "=? ", new String[]{Accountname, uid});
         if (cursor.getCount() > 0) {
             return true;
         } else

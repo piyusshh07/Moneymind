@@ -43,7 +43,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View viw, int position, long id) {
                 String selected_acc= adapter.getItem(position);
                 int ACC_ID= db2.get_account_id(selected_acc,userid);
                 Intent home=new Intent(accounts_page.this,home_page.class);
@@ -63,10 +63,11 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         Button create, cancel;
 
+
+        builder.setView(view);
+        dialog = builder.create();
         create=view.findViewById(R.id.create_account);
         cancel=view.findViewById(R.id.cancel_account);
-        builder.setView(view);
-        dialog= builder.create();
         createacc_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,10 +77,10 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                EditText acname_edit = view.findViewById(R.id.account_name_edittext);
-                String newaccname = acname_edit.getText().toString();
-                Boolean check_acc = db2.checkAccountname(newaccname, userid);
+            public void onClick(View v) {
+                EditText acname_ed= view.findViewById(R.id.account_name_edittext);
+                String newaccname = acname_ed.getText().toString();
+                Boolean check_acc = db2.checkAccountname(newaccname, userid );
                 if (check_acc == true) {
                     Toast.makeText(accounts_page.this, "already exists", Toast.LENGTH_SHORT).show();
                 } else {
@@ -88,7 +89,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
                         accountnames.clear();
                         accountnames.addAll(db2.fetch_accnames(userid));
                         adapter.notifyDataSetChanged();
-                        acname_edit.setText("");
+                        acname_ed.setText("");
                         dialog.dismiss();
                     }
                 }
