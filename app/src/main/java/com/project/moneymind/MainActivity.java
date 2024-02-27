@@ -3,6 +3,7 @@ package com.project.moneymind;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -32,9 +33,18 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                SharedPreferences prefs=getSharedPreferences("log_in",MODE_PRIVATE);
+                Boolean isLogged_In=prefs.getBoolean("isLoggedIn", false);
+
+                if(isLogged_In){
+                    startActivity(new Intent(MainActivity.this, accounts_page.class));
+                    finish();
+                }
+                else {
                 startActivity(login);
 
-                finish();
+                finish();}
             }
         }, 2000);
     }

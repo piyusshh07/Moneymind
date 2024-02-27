@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,10 +29,12 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts_page);
         Button createacc_btn;
-        String fnameuser;
+       String fnameuser;
 
-        Intent ihome = getIntent();
-        fnameuser=ihome.getStringExtra("name");
+        SharedPreferences sharedPreferences =getSharedPreferences("User_Data",MODE_PRIVATE);
+        fnameuser=sharedPreferences.getString("Username","user");
+
+
         DBHelper db2=new DBHelper(this);
         userid=db2.getuserid(fnameuser);
 

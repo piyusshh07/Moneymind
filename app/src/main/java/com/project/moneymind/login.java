@@ -34,14 +34,19 @@ public class login extends AppCompatActivity {
         DB= new DBHelper(this);
 
 
-
-
         Intent register= new Intent(login.this, registration_page.class);
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String user = usname.getText().toString();
                     String password = paswrd.getText().toString();
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("User_Data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("Username", user);
+                    editor.apply();
+
+
                     if (user.equals("") || password.equals("")) {
                         Toast.makeText(login.this, "please enter all the details", Toast.LENGTH_SHORT).show();}
                     else{
@@ -55,6 +60,10 @@ public class login extends AppCompatActivity {
                                     if (checkusernamepassword == true) {
                                         Intent accountspage= new Intent(login.this, accounts_page.class);
                                         Toast.makeText( login.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                                        SharedPreferences prefs=getSharedPreferences("log_in",MODE_PRIVATE);
+                                        SharedPreferences.Editor edit=prefs.edit();
+                                        edit.putBoolean("isLoggedIn",true);
+                                        edit.apply();
 
                                         accountspage.putExtra("name",usname.getText().toString());
                                         startActivity(accountspage);}
