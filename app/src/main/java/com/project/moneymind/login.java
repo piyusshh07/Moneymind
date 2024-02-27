@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,13 +35,13 @@ public class login extends AppCompatActivity {
 
 
 
+
         Intent register= new Intent(login.this, registration_page.class);
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String user = usname.getText().toString();
                     String password = paswrd.getText().toString();
-
                     if (user.equals("") || password.equals("")) {
                         Toast.makeText(login.this, "please enter all the details", Toast.LENGTH_SHORT).show();}
                     else{

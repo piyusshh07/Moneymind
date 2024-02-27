@@ -51,7 +51,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String create_acc_table = ("Create table " + Acc_table + "("
                 + Acc_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Acc_user_id + " INTEGER ,"
-                + Acc_name + " TEXT , " +
+                + Acc_name + " TEXT , "
+                + Acc_balance+" INTEGER ," +
                 " FOREIGN KEY (" + Acc_user_id + ") REFERENCES " + usertable + "(" + userid + ") )");
         // userdb.execSQL("Create table expense_records(expense_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,Expense_category TEXT NOT NULL,amount REAL NOT NULL,date TEXT NOT NULL,description TEXT NOT NULL ,FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
         // userdb.execSQL("Create table Budgets(budget_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,budget_name TEXT NOT NULL, total_amount REAL NOT NULL,start_date TEXT NOT NULL,end_date TEXT NOT NULL, FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
@@ -139,11 +140,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return acc_names;
     }
 
-    public long CreateAccount(Integer userID, String accountName) {
+    public long CreateAccount(Integer userID, String accountName, Integer inbalance) {
         SQLiteDatabase userdb = this.getWritableDatabase();
         ContentValues Values = new ContentValues();
         Values.put(Acc_user_id , userID);
         Values.put(Acc_name, accountName);
+        Values.put(Acc_balance,inbalance);
         return userdb.insert(Acc_table, null, Values);
 
     }

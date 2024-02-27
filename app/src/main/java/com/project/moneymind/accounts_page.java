@@ -79,13 +79,15 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
             @Override
             public void onClick(View v) {
                 EditText acname_ed= view.findViewById(R.id.account_name_edittext);
+                EditText inamount=view.findViewById(R.id.initial_amount_edittext);
                 String newaccname = acname_ed.getText().toString();
+                String initial_acbalance=inamount.getText().toString();
                 Boolean check_acc = db2.checkAccountname(newaccname, userid );
                 if (check_acc == true) {
                     Toast.makeText(accounts_page.this, "already exists", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!newaccname.isEmpty()) {
-                        db2.CreateAccount(userid, newaccname);
+                        db2.CreateAccount(userid, newaccname , Integer.valueOf(initial_acbalance));
                         accountnames.clear();
                         accountnames.addAll(db2.fetch_accnames(userid));
                         adapter.notifyDataSetChanged();
