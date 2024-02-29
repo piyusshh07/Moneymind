@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME="Logins.db";
-    public static final int version = 3;
+    public static final int version = 4;
     //user login
     public static final String userid = "Userid";
     public static final String username = "Username";

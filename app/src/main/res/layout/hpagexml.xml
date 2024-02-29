@@ -45,10 +45,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to account 1"
+                android:text="Welcome to MoneyMind"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"
+                android:id="@+id/acc_name"></TextView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/ac_bal"

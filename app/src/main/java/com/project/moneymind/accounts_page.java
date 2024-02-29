@@ -53,9 +53,12 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
                 home.putExtra("Account_id", ACC_ID);
                 home.putExtra("User_id", userid);
-                home.putExtra("User_name", fnameuser);
                 startActivity(home);
                 Toast.makeText(accounts_page.this,"Selected account: "+selected_acc,Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences = getSharedPreferences("username_", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Username", fnameuser);
+                editor.apply();
             }
         });
 

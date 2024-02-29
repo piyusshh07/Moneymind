@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +26,7 @@ public class home_page extends AppCompatActivity {
 
     @SuppressLint("MissingInflatedId")
     String t1;
-    TextView fname, balance;
+    TextView fname, balance ,acc_Name;
     CardView ac_bal;
     String us ,nameuser ;
     Toolbar toolbar;
@@ -63,8 +64,10 @@ public class home_page extends AppCompatActivity {
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.navigationview);
 
-        Intent oghome = getIntent();
-        nameuser=oghome.getStringExtra("ftname");
+
+        SharedPreferences sharedPreferences = getSharedPreferences("username_", MODE_PRIVATE);
+
+        nameuser=sharedPreferences.getString("Username","fnameuser");
         fname.setText("Hello "+nameuser);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.opendawer,R.string.closedrawer);

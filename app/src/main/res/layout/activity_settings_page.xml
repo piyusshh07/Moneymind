@@ -38,6 +38,7 @@
         android:text="Log out"
         android:background="@color/blue"
         android:layout_margin="10dp"
+        android:id="@+id/logout"
         ></Button>
 
 
