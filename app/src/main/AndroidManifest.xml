@@ -11,9 +11,15 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
+            android:name=".history_page"
+            android:exported="false" />
+        <activity
+            android:name=".records_page"
+            android:exported="false" />
+        <activity
             android:name=".settings_page"
             android:exported="false"
-            android:theme="@style/Theme.actionbar"/>
+            android:theme="@style/Theme.actionbar" />
         <activity
             android:name=".home_page"
             android:exported="false"

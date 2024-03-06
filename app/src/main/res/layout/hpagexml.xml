@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"><com.google.android.material.appbar.AppBarLayout
+    android:layout_height="match_parent">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@color/blue"
+        android:translationX="310dp"
+        android:translationY="700dp"
+        android:src="@drawable/plus_2"
+        android:layout_gravity="center"
+        android:elevation="60dp"
+        android:id="@+id/fab"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -20,6 +33,8 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -28,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/hellouser"
@@ -39,8 +55,6 @@
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 android:textStyle="bold"></TextView>
-
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
+                    android:inputType="number"
                     android:text="00000000"
                     android:textAlignment="center"
                     android:textColor="@color/black"
@@ -190,9 +205,7 @@
                 app:cardBackgroundColor="@color/grey"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="7dp"
-
                 >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -204,5 +217,4 @@
         </LinearLayout>
     </ScrollView>
 </com.google.android.material.appbar.AppBarLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

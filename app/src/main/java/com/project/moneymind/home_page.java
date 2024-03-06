@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,12 +27,17 @@ public class home_page extends AppCompatActivity {
 
     @SuppressLint("MissingInflatedId")
     String t1;
-    TextView fname, balance ,acc_Name;
+    TextView fname, balance ,acc_Name ;
     CardView ac_bal;
     String us ,nameuser ;
+
+    Integer acc_id,user_id ,acc_balance;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    DBHelper db;
+
+
 
 
     @Override
@@ -65,9 +71,30 @@ public class home_page extends AppCompatActivity {
         navigationView=findViewById(R.id.navigationview);
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences("username_", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        acc_id = sharedPreferences.getInt("account_id", -1);
+        user_id = sharedPreferences.getInt("user_id", -1);
+        nameuser =sharedPreferences.getString("username","fnameuser");
 
-        nameuser=sharedPreferences.getString("Username","fnameuser");
+
+
+// Check if acc_id and user_id are correctly retrieved
+        Log.d("Debug", "acc_id: " + acc_id + ", user_id: " + user_id);
+
+// If acc_id and user_id are correct, use them to get account balance
+        if (acc_id != -1 && user_id != -1) {
+            acc_balance = db.getAccountBalance(acc_id, user_id);
+            balance.setText(String.valueOf(acc_balance));
+        } else {
+            // Handle the case where acc_id or user_id is -1
+            Log.e("Error", "Invalid acc_id or user_id");
+        }
+
+
+        db=new DBHelper(this);
+        acc_balance= db.getAccountBalance(acc_id,user_id);
+
+        balance.setText(String.valueOf(acc_balance));
         fname.setText("Hello "+nameuser);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.opendawer,R.string.closedrawer);

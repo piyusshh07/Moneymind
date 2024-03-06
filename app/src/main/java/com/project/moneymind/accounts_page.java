@@ -22,6 +22,8 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
     private static final int max_acc=4;
     private int acc_counter=0;
     int userid;
+    int ACC_ID;
+    int accuserid;
     AlertDialog dialog;
 
     @Override
@@ -29,17 +31,16 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts_page);
         Button createacc_btn;
-       String fnameuser;
+       String fnameuser ;
 
         SharedPreferences sharedPreferences =getSharedPreferences("User_Data",MODE_PRIVATE);
         fnameuser=sharedPreferences.getString("Username","user");
 
-
         DBHelper db2=new DBHelper(this);
         userid=db2.getuserid(fnameuser);
+        accountnames=db2.fetch_accnames(userid);
 
         listView=findViewById(R.id.listview);
-        accountnames=db2.fetch_accnames(userid);
 
         adapter=new ArrayAdapter<>(this,R.layout.list_item_acc,accountnames);
         listView.setAdapter(adapter);
@@ -48,17 +49,20 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
             @Override
             public void onItemClick(AdapterView<?> parent, View viw, int position, long id) {
                 String selected_acc= adapter.getItem(position);
-                int ACC_ID= db2.get_account_id(selected_acc,userid);
-                Intent home=new Intent(accounts_page.this,home_page.class);
+                ACC_ID = db2.get_account_id(selected_acc,userid);
+                accuserid =db2.getaccuserid(ACC_ID);
 
-                home.putExtra("Account_id", ACC_ID);
-                home.putExtra("User_id", userid);
-                startActivity(home);
                 Toast.makeText(accounts_page.this,"Selected account: "+selected_acc,Toast.LENGTH_SHORT).show();
-                SharedPreferences sharedPreferences = getSharedPreferences("username_", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("Username", fnameuser);
+                editor.putString("username",fnameuser);
+                editor.putInt("account_id", ACC_ID);
+                editor.putInt("user_id", accuserid);
                 editor.apply();
+
+                Intent home=new Intent(accounts_page.this,home_page.class);
+                startActivity(home);
+
             }
         });
 
