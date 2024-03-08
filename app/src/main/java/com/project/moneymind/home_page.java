@@ -21,7 +21,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.project.moneymind.databinding.ActivityHomePageBinding;
 
 public class home_page extends AppCompatActivity {
 
@@ -36,7 +38,8 @@ public class home_page extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     DBHelper db;
-
+    ActivityHomePageBinding binding;
+    FloatingActionButton fabbtn;
 
 
 
@@ -45,6 +48,7 @@ public class home_page extends AppCompatActivity {
         new MenuInflater(this).inflate(R.menu.opt_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -69,13 +73,13 @@ public class home_page extends AppCompatActivity {
         toolbar=findViewById(R.id.toolbar);
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.navigationview);
-
-
+        binding = ActivityHomePageBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        fabbtn=findViewById(R.id.fab);
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
         nameuser =sharedPreferences.getString("username","fnameuser");
-
 
 
 // Check if acc_id and user_id are correctly retrieved
@@ -111,7 +115,12 @@ public class home_page extends AppCompatActivity {
         if(getSupportActionBar()!=null){
         }
         toolbar.setTitle("Home");
-
+         fabbtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 new AddTransactionFragement().show(getSupportFragmentManager(), null);
+             }
+         });
 
         ac_bal.setOnClickListener(new View.OnClickListener() {
             @Override
