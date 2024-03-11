@@ -144,9 +144,9 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/saveTransaction"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:gravity="center"
-                android:text="save transaction"
+                android:text="Save transaction"
                 android:layout_margin="10dp"
                 app:cornerRadius="10dp"
                 android:background="@color/blue"

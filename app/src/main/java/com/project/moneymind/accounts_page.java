@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 
 import java.util.ArrayList;
 
@@ -78,40 +80,32 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
         dialog = builder.create();
         create=view.findViewById(R.id.create_account);
         cancel=view.findViewById(R.id.cancel_account);
-        createacc_btn.setOnClickListener(new View.OnClickListener() {
+        createacc_btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.show();
             }
         });
 
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText acname_ed= view.findViewById(R.id.account_name_edittext);
-                EditText inamount=view.findViewById(R.id.initial_amount_edittext);
-                String newaccname = acname_ed.getText().toString();
-                String initial_acbalance=inamount.getText().toString();
-                Boolean check_acc = db2.checkAccountname(newaccname, userid );
-                if (check_acc == true) {
-                    Toast.makeText(accounts_page.this, "already exists", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (!newaccname.isEmpty()) {
-                        db2.CreateAccount(userid, newaccname , Integer.valueOf(initial_acbalance));
-                        accountnames.clear();
-                        accountnames.addAll(db2.fetch_accnames(userid));
-                        adapter.notifyDataSetChanged();
-                        acname_ed.setText("");
-                        dialog.dismiss();
-                    }
+        create.setOnClickListener(v -> {
+            EditText acname_ed= view.findViewById(R.id.account_name_edittext);
+            EditText inamount=view.findViewById(R.id.initial_amount_edittext);
+            String newaccname = acname_ed.getText().toString();
+            String initial_acbalance=inamount.getText().toString();
+            Boolean check_acc = db2.checkAccountname(newaccname, userid );
+            if (check_acc == true) {
+                Toast.makeText(accounts_page.this, "already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                if (!newaccname.isEmpty()) {
+                    db2.CreateAccount(userid, newaccname , Integer.valueOf(initial_acbalance));
+                    accountnames.clear();
+                    accountnames.addAll(db2.fetch_accnames(userid));
+                    adapter.notifyDataSetChanged();
+                    acname_ed.setText("");
+                    dialog.dismiss();
                 }
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+        cancel.setOnClickListener(view1 -> dialog.dismiss());
     }
 }
