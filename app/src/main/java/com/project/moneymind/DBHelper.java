@@ -223,7 +223,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
         } else
             cursor.close();
-            return false;
+        return false;
     }
     }
 

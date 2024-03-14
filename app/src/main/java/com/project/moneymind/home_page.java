@@ -18,6 +18,7 @@ import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -26,7 +27,7 @@ public class home_page extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     String t1;
     TextView fname, balance ,acc_Name;
-    CardView ac_bal;
+    CardView ac_bal , Expensecard;
     String us ,nameuser ;
 
     Integer acc_id,user_id ,acc_balance;
@@ -66,14 +67,14 @@ public class home_page extends AppCompatActivity {
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.navigationview);
         fabtn=findViewById(R.id.fab);
-
+        Expensecard=findViewById(R.id.history);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
         nameuser =sharedPreferences.getString("username","fnameuser");
 
-
+        Intent his_page=new Intent(home_page.this, history_page.class);
 
 // Check if acc_id and user_id are correctly retrieved
         Log.d("Debug", "acc_id: " + acc_id + ", user_id: " + user_id);
@@ -92,8 +93,8 @@ public class home_page extends AppCompatActivity {
         acc_balance= db.getAccountBalance(acc_id,user_id);
 
         nameuser=sharedPreferences.getString("Username","fnameuser");
-      //  balance.setText(String.valueOf(acc_balance));
-    //    fname.setText("Hello "+nameuser);
+      balance.setText(String.valueOf(acc_balance));
+    fname.setText("Hello "+nameuser);
 
         fabtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +111,21 @@ public class home_page extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itid=item.getItemId();
+
+                if (itid==R.id.abal_nav){
+                    opendialog();
+                } else if (itid==R.id.ex_history_nav) {
+                    startActivity(his_page);
+
+                }
                 return true;
+            }
+        });
+
+        Expensecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(his_page);
             }
         });
         if(getSupportActionBar()!=null){

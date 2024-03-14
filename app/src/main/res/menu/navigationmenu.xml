@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/black">
 <item
-    android:id="@+id/abal"
+    android:id="@+id/abal_nav"
     android:title="Account Balance"
     >
 </item>
     <item
-        android:id="@+id/ex_history"
+        android:id="@+id/ex_history_nav"
         android:title="Expense History"
         >
     </item>
     <item
-        android:id="@+id/charts"
+        android:id="@+id/charts_nav"
         android:title="Charts"
         >
     </item>
     <item
-        android:id="@+id/budget_goal"
+        android:id="@+id/budget_goal_nav"
         android:title="Budget and Goals"
         >
     </item>
     <item
-        android:id="@+id/plnd_payment"
+        android:id="@+id/plnd_payment_nav"
         android:title="Planned Payments"
         >
     </item><item
