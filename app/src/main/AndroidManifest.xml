@@ -11,36 +11,31 @@
         android:supportsRtl="true"
         tools:targetApi="31" >
         <activity
-            android:name=".Mainpage"
-            android:exported="false" />
+            android:name=".views.activties.history_page"
+            android:exported="false"
+            android:theme="@style/Theme.MoneyMind"/>
         <activity
-            android:name=".history_page"
-            android:exported="false" />
-        <activity
-            android:name=".records_page"
-            android:exported="false" />
-        <activity
-            android:name=".settings_page"
+            android:name=".views.activties.settings_page"
             android:exported="false"
             android:theme="@style/Theme.actionbar" />
         <activity
-            android:name=".home_page"
+            android:name=".views.activties.home_page"
             android:exported="false"
             android:theme="@style/Theme.splash" />
         <activity
-            android:name=".accounts_page"
+            android:name=".views.activties.accounts_page"
             android:exported="false"
             android:theme="@style/Theme.MoneyMind" />
         <activity
-            android:name=".registration_page"
+            android:name=".views.activties.registration_page"
             android:exported="false"
             android:theme="@style/Theme.MoneyMind" />
         <activity
-            android:name=".login"
+            android:name=".views.activties.login"
             android:exported="false"
             android:theme="@style/Theme.MoneyMind" />
         <activity
-            android:name=".MainActivity"
+            android:name=".views.activties.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.splash" >
             <intent-filter>

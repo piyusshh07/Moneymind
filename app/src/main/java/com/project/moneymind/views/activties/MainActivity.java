@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.project.moneymind.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView appicon;
         TextView appname;
 
-        Intent login = new Intent(MainActivity.this, login.class);
+        Intent login = new Intent(MainActivity.this, com.project.moneymind.views.activties.login.class);
 
 
         appicon = findViewById(R.id.app_icon);

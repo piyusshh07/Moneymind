@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,14 +14,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.project.moneymind.views.fragements.AddTransactionFragement;
+import com.project.moneymind.database.DBHelper;
+import com.project.moneymind.R;
+import com.project.moneymind.models.baldialog;
+
 public class home_page extends AppCompatActivity {
 
     @SuppressLint("MissingInflatedId")
@@ -49,7 +50,7 @@ public class home_page extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId=item.getItemId();
         if(itemId==R.id.setting){
-            Intent settings=new Intent(home_page.this,settings_page.class);
+            Intent settings=new Intent(home_page.this, settings_page.class);
             startActivity(settings);
         }
         else if (itemId==android.R.id.home){

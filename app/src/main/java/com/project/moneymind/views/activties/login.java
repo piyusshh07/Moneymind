@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.project.moneymind.database.DBHelper;
+import com.project.moneymind.R;
 
 public class login extends AppCompatActivity {
 

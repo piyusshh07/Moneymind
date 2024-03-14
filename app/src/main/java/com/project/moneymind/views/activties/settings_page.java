@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.project.moneymind.R;
 
 public class settings_page extends AppCompatActivity {
 

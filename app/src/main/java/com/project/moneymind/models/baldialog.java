@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.models;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.project.moneymind.R;
 
 public class baldialog extends AppCompatDialogFragment {
 

@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.project.moneymind.database.DBHelper;
+import com.project.moneymind.R;
 
 public class registration_page extends AppCompatActivity {
 
@@ -53,7 +56,7 @@ public class registration_page extends AppCompatActivity {
                     if(insert==true)
                     {
                         Toast.makeText(registration_page.this,"registered successfully!!! Please login again",Toast.LENGTH_SHORT).show();
-                        Intent loginpage=new Intent(registration_page.this,login.class);
+                        Intent loginpage=new Intent(registration_page.this, login.class);
                         startActivity(loginpage);
                     }
                 }

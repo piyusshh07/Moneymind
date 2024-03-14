@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.activties;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
+import com.project.moneymind.database.DBHelper;
+import com.project.moneymind.R;
 
 import java.util.ArrayList;
 
@@ -62,7 +65,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
                 editor.putInt("user_id", accuserid);
                 editor.apply();
 
-                Intent home=new Intent(accounts_page.this,home_page.class);
+                Intent home=new Intent(accounts_page.this, home_page.class);
                 startActivity(home);
 
             }

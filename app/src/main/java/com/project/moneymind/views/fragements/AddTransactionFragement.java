@@ -1,4 +1,4 @@
-package com.project.moneymind;
+package com.project.moneymind.views.fragements;
 
 import android.app.DatePickerDialog;
 import android.os.Build;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
+import com.project.moneymind.R;
 import com.project.moneymind.databinding.FragmentAddTransactionFragementBinding;
 
 import java.text.SimpleDateFormat;
