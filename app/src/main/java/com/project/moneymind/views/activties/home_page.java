@@ -76,13 +76,14 @@ public class home_page extends AppCompatActivity {
         nameuser = sharedPreferences.getString("username","fnameuser");
 
         Intent his_page=new Intent(home_page.this, history_page.class);
+        db=new DBHelper(this);
 
 // Check if acc_id and user_id are correctly retrieved
         Log.d("Debug", "acc_id: " + acc_id + ", user_id: " + user_id);
 
 // If acc_id and user_id are correct, use them to get account balance
         if (acc_id != -1 && user_id != -1) {
-            acc_balance = db.getAccountBalance(acc_id, user_id);
+            acc_balance = (int) db.getAccountBalanceById(acc_id, user_id);
             balance.setText(String.valueOf(acc_balance));
         } else {
             // Handle the case where acc_id or user_id is -1
@@ -90,8 +91,6 @@ public class home_page extends AppCompatActivity {
         }
 
 
-        db=new DBHelper(this);
-        acc_balance= db.getAccountBalance(acc_id,user_id);
 
 
       balance.setText(String.valueOf(acc_balance));

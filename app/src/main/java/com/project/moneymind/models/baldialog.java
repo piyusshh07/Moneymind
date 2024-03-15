@@ -10,21 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.project.moneymind.database.DBHelper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.project.moneymind.R;
+import com.project.moneymind.database.DBHelper;
 
 public class baldialog extends AppCompatDialogFragment {
 
     private EditText edtbal;
+
     public Dialog onCreateDialog(Bundle savedInstanceState)
 
     {
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater=getActivity().getLayoutInflater();
         View view=inflater.inflate(R.layout.ac_baledit,null);
         builder.setView(view)

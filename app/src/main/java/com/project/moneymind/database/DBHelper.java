@@ -1,12 +1,12 @@
 package com.project.moneymind.database;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.project.moneymind.views.activties.home_page;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Acc_balance = "account_balance";
 
 
-    public DBHelper(@Nullable Context context) {
+    public DBHelper(@Nullable home_page context) {
         super(context, DBNAME, null, version);
     }
 
@@ -194,23 +194,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
 
-    public Integer getAccountBalance(int accountid, int userId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String us_id = String.valueOf(userId);
-        String account_ID = String.valueOf(accountid);
-        Integer balance = -1; // Default value if account is not found
+    public double getAccountBalanceById(int accId, int userId) {
+        double accBalance = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT " + Acc_balance + "  FROM " + Acc_table + " WHERE " + Acc_id + "=?" + " AND " + Acc_user_id + "=?", new String[]{account_ID, us_id});
+        Cursor cursor = db.rawQuery("SELECT " + Acc_balance + " FROM " + Acc_table + " WHERE " + Acc_id + "=? AND " + Acc_user_id + "=?", new String[]{String.valueOf(accId), String.valueOf(userId)});
+
         if (cursor != null && cursor.moveToFirst()) {
-
-            int balanceindex = cursor.getColumnIndex( Acc_balance );
-            if (balanceindex >= 0) {
-                balance = cursor.getInt(balanceindex);
-            }
+            accBalance = cursor.getDouble(0); // Assuming Acc_balance is at index 0
         }
-        cursor.close();
-        return balance;
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return accBalance;
     }
+
+
 
 
     public boolean checkAccountname(String Accountname, int userid) {
@@ -223,5 +224,16 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
         return false;
     }
+
+    public boolean updateAccountBalance(int accId, int userId, double newBalance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Acc_balance, newBalance);
+
+        int rowsAffected = db.update(Acc_table, values, Acc_id + "=? AND " + Acc_user_id + "=?", new String[]{String.valueOf(accId), String.valueOf(userId)});
+
+        return rowsAffected > 0;
     }
+
+}
 
