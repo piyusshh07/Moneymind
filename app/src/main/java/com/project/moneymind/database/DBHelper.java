@@ -175,26 +175,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return userdb.insert(Acc_table, null, Values);
     }
 
-    public int get_account_id(String acc_name, int user_id) {
-        int acc_id = -1;
-        SQLiteDatabase db = this.getWritableDatabase();
-        String u_id = String.valueOf(user_id);
+    public int getAccountId(String accName, int userId) {
+        int accId = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT " + Acc_id + "  FROM " + Acc_table + " WHERE " + Acc_name + "=?" + " AND " + Acc_user_id + "=?", new String[]{acc_name, u_id});
+        Cursor cursor = db.rawQuery("SELECT " + Acc_id + " FROM " + Acc_table + " WHERE " + Acc_name + "=? AND " + Acc_user_id + "=?", new String[]{accName, String.valueOf(userId)});
 
         if (cursor != null && cursor.moveToFirst()) {
-
-            int acc_id_Index = cursor.getColumnIndex(Acc_id);
-
-            // Check if column indices are valid before retrieving data
-            if (acc_id_Index >= 0) {
-                acc_id = cursor.getInt(acc_id_Index);
-            }
+            accId = cursor.getInt(0); // Assuming Acc_id is at index 0
         }
-        cursor.close();
-        return acc_id;
 
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return accId;
     }
+
+
 
     public Integer getAccountBalance(int accountid, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();

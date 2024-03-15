@@ -73,7 +73,7 @@ public class home_page extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
-        nameuser =sharedPreferences.getString("username","fnameuser");
+        nameuser = sharedPreferences.getString("username","fnameuser");
 
         Intent his_page=new Intent(home_page.this, history_page.class);
 
@@ -93,7 +93,7 @@ public class home_page extends AppCompatActivity {
         db=new DBHelper(this);
         acc_balance= db.getAccountBalance(acc_id,user_id);
 
-        nameuser=sharedPreferences.getString("Username","fnameuser");
+
       balance.setText(String.valueOf(acc_balance));
     fname.setText("Hello "+nameuser);
 

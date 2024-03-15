@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -40,6 +41,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         SharedPreferences sharedPreferences =getSharedPreferences("User_Data",MODE_PRIVATE);
         fnameuser=sharedPreferences.getString("Username","user");
+        Log.d("fname",fnameuser);
 
         DBHelper db2=new DBHelper(this);
         userid=db2.getuserid(fnameuser);
@@ -54,8 +56,21 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
             @Override
             public void onItemClick(AdapterView<?> parent, View viw, int position, long id) {
                 String selected_acc= adapter.getItem(position);
-                ACC_ID = db2.get_account_id(selected_acc,userid);
+                ACC_ID = db2.getAccountId(selected_acc,userid);
+
+                if(ACC_ID<=0){
+                    Log.d("fetch error",String.valueOf(ACC_ID));
+                }
+                else{
+                    Log.d("fetch","acc id fetched");
+                }
                 accuserid =db2.getaccuserid(ACC_ID);
+                if(accuserid<=0){
+                    Log.d("fetch error","accuser id not getting");
+                }
+                else{
+                    Log.d("fetch","accuser id fetched");
+                }
 
                 Toast.makeText(accounts_page.this,"Selected account: "+selected_acc,Toast.LENGTH_SHORT).show();
                 SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
