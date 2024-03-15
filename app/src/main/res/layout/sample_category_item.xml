@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/categoryicon"
-        android:layout_width="42dp"
+        android:layout_width="50dp"
         android:layout_height="42dp"
         android:backgroundTint="#050404"
-        android:padding="10dp"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />

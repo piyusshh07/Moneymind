@@ -1,11 +1,14 @@
 package com.project.moneymind.views.fragements;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +19,13 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.project.moneymind.R;
+import com.project.moneymind.adapters.category_adapter;
 import com.project.moneymind.databinding.FragmentAddTransactionFragementBinding;
+import com.project.moneymind.databinding.ListDialogBinding;
+import com.project.moneymind.models.Category;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddTransactionFragement extends BottomSheetDialogFragment {
@@ -84,6 +91,41 @@ TextInputEditText datebox;
             }
         });
                 datepicker.show();
+            }
+        });
+        binding.category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListDialogBinding dialogBinding=ListDialogBinding.inflate(inflater);
+                AlertDialog categorydialog=new AlertDialog.Builder(getContext()).create();
+                categorydialog.setView(dialogBinding.getRoot());
+
+                ArrayList<Category> categories=new ArrayList<Category>();
+                categories.add(new Category("Foods & drinks",R.drawable.restaurant_cat));
+                categories.add(new Category("Shopping",R.drawable.shopping_cat));
+                categories.add(new Category("Housing",R.drawable.house_cat));
+                categories.add(new Category("Groceries",R.drawable.groceries_cat));
+                categories.add(new Category("Transportation",R.drawable.transport_cat));
+                categories.add(new Category("Vehicle",R.drawable.vehicle_cat));
+                categories.add(new Category("Life & entertainment",R.drawable.entertainment_cat));
+                categories.add(new Category("Communication ,PC",R.drawable.pc_cat));
+                categories.add(new Category("Financial expenses",R.drawable.expense_cat));
+                categories.add(new Category("Investments",R.drawable.investment_cat));
+                categories.add(new Category("Income",R.drawable.income_cat));
+                categories.add(new Category("Other",R.drawable.menu));
+
+                    category_adapter categoryAdpater=new category_adapter(getContext(), categories, new category_adapter.CategoryclickListener() {
+                        @Override
+                        public void oncategoryclicked(Category category) {
+                            binding.category.setText(category.getCategoryname());
+                            categorydialog.dismiss();
+                        }
+                    });
+                    dialogBinding.recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
+                    dialogBinding.recyclerview.setAdapter(categoryAdpater);
+
+                    categorydialog.show();
+
             }
         });
         return binding.getRoot();
