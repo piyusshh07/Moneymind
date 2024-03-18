@@ -5,9 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.activties.history_page">
+    tools:context=".views.activties.history_page"
+    android:layout_marginTop="20dp">
 <androidx.recyclerview.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:listitem="@layout/history_record"></androidx.recyclerview.widget.RecyclerView>
+    tools:listitem="@layout/history_record"
+    android:id="@+id/transaction_list"></androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

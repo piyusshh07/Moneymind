@@ -23,6 +23,8 @@ import com.project.moneymind.adapters.category_adapter;
 import com.project.moneymind.databinding.FragmentAddTransactionFragementBinding;
 import com.project.moneymind.databinding.ListDialogBinding;
 import com.project.moneymind.models.Category;
+import com.project.moneymind.utils.constants;
+import com.project.moneymind.utils.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,9 +83,9 @@ TextInputEditText datebox;
                         calendar.set(calendar.MONTH, datepicker.getDatePicker().getMonth());
                         calendar.set(calendar.YEAR, datepicker.getDatePicker().getYear());
 
-                        SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMMM yyyy");
+                      //  SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMMM yyyy");
 
-                        String datetoshow=dateFormat.format(calendar.getTime());
+                      String datetoshow= helper.formatdate(calendar.getTime());
 
                         binding.date.setText(datetoshow);
 
@@ -100,27 +102,14 @@ TextInputEditText datebox;
                 AlertDialog categorydialog=new AlertDialog.Builder(getContext()).create();
                 categorydialog.setView(dialogBinding.getRoot());
 
-                ArrayList<Category> categories=new ArrayList<Category>();
-                categories.add(new Category("Foods & drinks",R.drawable.restaurant_cat));
-                categories.add(new Category("Shopping",R.drawable.shopping_cat));
-                categories.add(new Category("Housing",R.drawable.house_cat));
-                categories.add(new Category("Groceries",R.drawable.groceries_cat));
-                categories.add(new Category("Transportation",R.drawable.transport_cat));
-                categories.add(new Category("Vehicle",R.drawable.vehicle_cat));
-                categories.add(new Category("Life & entertainment",R.drawable.entertainment_cat));
-                categories.add(new Category("Communication ,PC",R.drawable.pc_cat));
-                categories.add(new Category("Financial expenses",R.drawable.expense_cat));
-                categories.add(new Category("Investments",R.drawable.investment_cat));
-                categories.add(new Category("Income",R.drawable.income_cat));
-                categories.add(new Category("Other",R.drawable.menu));
 
-                    category_adapter categoryAdpater=new category_adapter(getContext(), categories, new category_adapter.CategoryclickListener() {
+
+                    category_adapter categoryAdpater=new category_adapter(getContext(), constants.categories, new category_adapter.CategoryclickListener() {
                         @Override
                         public void oncategoryclicked(Category category) {
                             binding.category.setText(category.getCategoryname());
                             categorydialog.dismiss();
-                        }
-                    });
+                        }});
                     dialogBinding.recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
                     dialogBinding.recyclerview.setAdapter(categoryAdpater);
 

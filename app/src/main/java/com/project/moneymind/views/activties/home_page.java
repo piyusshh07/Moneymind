@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,10 +22,17 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.project.moneymind.adapters.transactions_adapter;
+import com.project.moneymind.databinding.ActivityHomePageBinding;
+import com.project.moneymind.models.transaction;
+import com.project.moneymind.utils.constants;
 import com.project.moneymind.views.fragements.AddTransactionFragement;
 import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.R;
 import com.project.moneymind.models.baldialog;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class home_page extends AppCompatActivity {
 
@@ -58,6 +69,7 @@ public class home_page extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
@@ -69,14 +81,13 @@ public class home_page extends AppCompatActivity {
         navigationView=findViewById(R.id.navigationview);
         fabtn=findViewById(R.id.fab);
         Expensecard=findViewById(R.id.history);
-
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
         nameuser = sharedPreferences.getString("username","fnameuser");
 
         Intent his_page=new Intent(home_page.this, history_page.class);
-        db=new DBHelper(this);
+        db=new DBHelper(home_page.this);
 
 // Check if acc_id and user_id are correctly retrieved
         Log.d("Debug", "acc_id: " + acc_id + ", user_id: " + user_id);
@@ -137,10 +148,13 @@ public class home_page extends AppCompatActivity {
                 opendialog();
             }
         });
+
+
     }
     public void opendialog()
     {
         baldialog baldialog=new baldialog();
         baldialog.show(getSupportFragmentManager(),"bal dialog");
     }
+
 }

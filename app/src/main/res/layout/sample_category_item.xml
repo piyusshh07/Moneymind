@@ -14,7 +14,8 @@
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:srcCompat="@drawable/entertainment_cat"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/categorytext"

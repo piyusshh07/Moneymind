@@ -1,5 +1,6 @@
 package com.project.moneymind.database;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import com.project.moneymind.views.activties.home_page;
+import com.project.moneymind.views.activties.registration_page;
 
 import java.util.ArrayList;
 
@@ -33,9 +35,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Acc_balance = "account_balance";
 
 
-    public DBHelper(@Nullable home_page context) {
+    public DBHelper(@Nullable Context context) {
         super(context, DBNAME, null, version);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase userdb) {
@@ -97,8 +100,6 @@ public class DBHelper extends SQLiteOpenHelper {
         } else
             cursor.close();
         return false;
-
-
     }
 
     public boolean checkusernamepassword(String Username, String Password) {
@@ -184,11 +185,9 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             accId = cursor.getInt(0); // Assuming Acc_id is at index 0
         }
-
         if (cursor != null) {
             cursor.close();
         }
-
         return accId;
     }
 

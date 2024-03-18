@@ -13,7 +13,7 @@
         <activity
             android:name=".views.activties.history_page"
             android:exported="false"
-            android:theme="@style/Theme.MoneyMind"/>
+            android:theme="@style/Theme.actionbar"/>
         <activity
             android:name=".views.activties.settings_page"
             android:exported="false"

@@ -43,7 +43,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
         fnameuser=sharedPreferences.getString("Username","user");
         Log.d("fname",fnameuser);
 
-        DBHelper db2=new DBHelper(this);
+        DBHelper db2=new DBHelper(accounts_page.this);
         userid=db2.getuserid(fnameuser);
         accountnames=db2.fetch_accnames(userid);
 
