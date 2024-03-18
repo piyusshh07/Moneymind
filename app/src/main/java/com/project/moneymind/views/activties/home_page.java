@@ -1,38 +1,30 @@
 package com.project.moneymind.views.activties;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.project.moneymind.adapters.transactions_adapter;
-import com.project.moneymind.databinding.ActivityHomePageBinding;
-import com.project.moneymind.models.transaction;
-import com.project.moneymind.utils.constants;
+import com.google.android.material.textfield.TextInputEditText;
 import com.project.moneymind.views.fragements.AddTransactionFragement;
 import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.R;
-import com.project.moneymind.models.baldialog;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class home_page extends AppCompatActivity {
 
@@ -48,7 +40,8 @@ public class home_page extends AppCompatActivity {
     NavigationView navigationView;
     DBHelper db;
     FloatingActionButton fabtn;
-
+     AlertDialog baldialog;
+    TextInputEditText newbaltext;
 
 
 
@@ -70,6 +63,7 @@ public class home_page extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
@@ -105,7 +99,8 @@ public class home_page extends AppCompatActivity {
 
 
       balance.setText(String.valueOf(acc_balance));
-    fname.setText("Hello "+nameuser);
+        String name=db.getfname(user_id);
+    fname.setText("Hello "+ name);
 
         fabtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,9 +119,10 @@ public class home_page extends AppCompatActivity {
                 int itid=item.getItemId();
 
                 if (itid==R.id.abal_nav){
-                    opendialog();
+                   baldialog.show();
                 } else if (itid==R.id.ex_history_nav) {
-                    startActivity(his_page);
+                    Intent his=new Intent(home_page.this,history_page.class);
+                    startActivity(his);
 
                 }
                 return true;
@@ -142,19 +138,48 @@ public class home_page extends AppCompatActivity {
         if(getSupportActionBar()!=null){
         }
         toolbar.setTitle("Home");
+
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(home_page.this);
+        View v = getLayoutInflater().inflate(R.layout.balance_update_dialog,null);
+        builder.setView(v);
+        baldialog = builder.create();
         ac_bal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                opendialog();
+                baldialog.show();
+            }
+        });
+
+        TextView upadte_bal , cancel_bal;
+        upadte_bal=v.findViewById(R.id.update_bal_dialog);
+        cancel_bal=v.findViewById(R.id.cancel_text_dialog);
+        upadte_bal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Find the TextInputEditText from the inflated view
+                TextInputEditText newbaltext = v.findViewById(R.id.newbaledt);
+                if (newbaltext != null) {
+                    String newbal = newbaltext.getText().toString();
+                    double ba = Double.parseDouble(newbal);
+                    db.updateAccountBalance(acc_id, user_id, ba);
+                    baldialog.cancel();
+                    balance.setText((int) ba);
+                } else {
+                    Log.e("Error", "TextInputEditText not found in dialog layout");
+                }
             }
         });
 
 
-    }
-    public void opendialog()
-    {
-        baldialog baldialog=new baldialog();
-        baldialog.show(getSupportFragmentManager(),"bal dialog");
+        cancel_bal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                baldialog.cancel();
+            }
+        });
+
+
     }
 
 }

@@ -1,9 +1,11 @@
 package com.project.moneymind.database;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -45,18 +47,17 @@ public class DBHelper extends SQLiteOpenHelper {
         String create_user_table = ("Create table " + usertable + "("
                 + userid + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + username + " TEXT NOT NULL,"
-                + password + " TEXT,"
-                + fname + " TEXT,"
-                + sname + " TEXT,"
-                + mobno + " INTEGER ,"
-                + email + " TEXT ,"
-                + dob + " TEXT)");
+                + password + " TEXT NOT NULL,"
+                + fname + " TEXT NOT NULL,"
+                + sname + " TEXT NOT NULL,"
+                + email + " TEXT NOT NULL ,"
+                + dob + " TEXT NOT NULL )");
         userdb.execSQL(create_user_table);
 
         String create_acc_table = ("Create table " + Acc_table + "("
                 + Acc_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Acc_user_id + " INTEGER ,"
-                + Acc_name + " TEXT , "
+                + Acc_name + " TEXT NOT NULL, "
                 + Acc_balance + " INTEGER ," +
                 " FOREIGN KEY (" + Acc_user_id + ") REFERENCES " + usertable + "(" + userid + ") )");
         // userdb.execSQL("Create table expense_records(expense_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,Expense_category TEXT NOT NULL,amount REAL NOT NULL,date TEXT NOT NULL,description TEXT NOT NULL ,FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
@@ -210,6 +211,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return accBalance;
     }
 
+    @SuppressLint("Range")
+    public String getfname(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String Fname = null;
+
+        // Assuming fname, usertable, and userid are column names or variables storing column names
+        Cursor cursor = db.rawQuery("SELECT " + fname + " FROM " + usertable + " WHERE " + userid + "=?", new String[]{String.valueOf(userId)});
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Fname = cursor.getString(cursor.getColumnIndex(fname));
+        }
+
+        // Always close the cursor after using it
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        Log.d("db", "fname = " + Fname);
+        return Fname;
+    }
+
 
 
 
@@ -232,6 +254,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update(Acc_table, values, Acc_id + "=? AND " + Acc_user_id + "=?", new String[]{String.valueOf(accId), String.valueOf(userId)});
 
         return rowsAffected > 0;
+
     }
 
 }

@@ -30,7 +30,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
     int userid;
     int ACC_ID;
     int accuserid;
-    AlertDialog dialog;
+    AlertDialog dialog ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +88,12 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
 
         createacc_btn=findViewById(R.id.create_btn);
-        AlertDialog.Builder builder=new AlertDialog.Builder(accounts_page.this);
-        View view = getLayoutInflater().inflate(R.layout.add_account,null);
+
 
         Button create, cancel;
 
-
+        AlertDialog.Builder builder=new AlertDialog.Builder(accounts_page.this);
+        View view = getLayoutInflater().inflate(R.layout.add_account,null);
         builder.setView(view);
         dialog = builder.create();
         create=view.findViewById(R.id.create_account);
@@ -125,5 +125,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
             }
         });
         cancel.setOnClickListener(view1 -> dialog.dismiss());
+
     }
+
 }

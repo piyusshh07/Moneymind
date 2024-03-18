@@ -4,30 +4,36 @@
 <item
     android:id="@+id/abal_nav"
     android:title="Account Balance"
+    android:clickable="true"
     >
 </item>
     <item
         android:id="@+id/ex_history_nav"
         android:title="Expense History"
+        android:clickable="true"
         >
     </item>
     <item
         android:id="@+id/charts_nav"
         android:title="Charts"
+        android:clickable="true"
         >
     </item>
     <item
         android:id="@+id/budget_goal_nav"
         android:title="Budget and Goals"
+        android:clickable="true"
         >
     </item>
     <item
         android:id="@+id/plnd_payment_nav"
         android:title="Planned Payments"
+        android:clickable="true"
         >
     </item><item
     android:id="@+id/fut_predict"
     android:title="Future Predictions"
+    android:clickable="true"
     >
 </item>
 

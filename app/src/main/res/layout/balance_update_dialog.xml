@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="35dp"
+        android:id="@+id/edtlayout"
+       >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newbaledt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter  balance to be updated"
+            android:inputType="number"
+           />
+    </com.google.android.material.textfield.TextInputLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp">
+
+
+    <TextView
+        android:id="@+id/cancel_text_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel"
+       android:layout_gravity="left"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/blue"/>
+    <TextView
+        android:id="@+id/update_bal_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:translationX="170dp"
+        android:textColor="@color/blue"/>
+</LinearLayout>
+</LinearLayout>
