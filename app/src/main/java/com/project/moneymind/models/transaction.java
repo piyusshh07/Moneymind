@@ -7,9 +7,7 @@ public class transaction   {
     private Date date;
     private double amount;
     private long id;
-public transaction(){
 
-}
     public transaction(String type, String category, String account, String note, Date date, double amount, long id) {
         this.type = type;
         this.category = category;

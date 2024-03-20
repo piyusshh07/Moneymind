@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class home_page extends AppCompatActivity {
     DBHelper db;
     FloatingActionButton fabtn;
      AlertDialog baldialog;
-    TextInputEditText newbaltext;
+    double ba;
 
 
 
@@ -67,6 +68,7 @@ public class home_page extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
         ac_bal=findViewById(R.id.acbal_card);
         fname=findViewById(R.id.hellouser);
         balance=findViewById(R.id.baltext);
@@ -75,6 +77,9 @@ public class home_page extends AppCompatActivity {
         navigationView=findViewById(R.id.navigationview);
         fabtn=findViewById(R.id.fab);
         Expensecard=findViewById(R.id.history);
+
+
+        //sharedpreference code
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
@@ -109,6 +114,7 @@ public class home_page extends AppCompatActivity {
 
             }
         });
+
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.opendawer,R.string.closedrawer);
         drawerLayout.addDrawerListener(toggle);
@@ -161,7 +167,7 @@ public class home_page extends AppCompatActivity {
                 TextInputEditText newbaltext = v.findViewById(R.id.newbaledt);
                 if (newbaltext != null) {
                     String newbal = newbaltext.getText().toString();
-                    double ba = Double.parseDouble(newbal);
+                     ba = Double.parseDouble(newbal);
                     db.updateAccountBalance(acc_id, user_id, ba);
                     baldialog.cancel();
                     balance.setText((int) ba);

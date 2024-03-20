@@ -5,18 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.health.connect.datatypes.Record;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.project.moneymind.models.transaction;
 import com.project.moneymind.views.activties.home_page;
 import com.project.moneymind.views.activties.registration_page;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Logins.db";
-    public static final int version = 5;
+    public static final int version = 10;
     //user login
     public static final String userid = "Userid";
     public static final String username = "Username";
@@ -35,6 +40,18 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Acc_id = "account_id ";
     public static final String Acc_name = "account_name";
     public static final String Acc_balance = "account_balance";
+    public static final String Expense_table="expense_table";
+    public static final String Expense_id="expense_id";
+    public static final String Expense_account_id="expense_accont_id";
+
+    public static final String Expense_type="expense_type";
+    public static final String Expense_date="expense_date";
+    public static final String Expense_amount="expense_amount";
+    public static final String Expense_category="expense_category";
+
+    public static final String Expense_note="expense_note";
+    public static final  String Expense_account="expense_account";
+
 
 
     public DBHelper(@Nullable Context context) {
@@ -44,15 +61,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase userdb) {
-        String create_user_table = ("Create table " + usertable + "("
+        String create_user_table = ("CREATE TABLE " + usertable + "("
                 + userid + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + username + " TEXT NOT NULL,"
                 + password + " TEXT NOT NULL,"
                 + fname + " TEXT NOT NULL,"
                 + sname + " TEXT NOT NULL,"
-                + email + " TEXT NOT NULL ,"
-                + dob + " TEXT NOT NULL )");
+                + email + " TEXT NOT NULL,"
+                + mobno + " TEXT NOT NULL,"
+                + dob + " TEXT NOT NULL)");
         userdb.execSQL(create_user_table);
+
 
         String create_acc_table = ("Create table " + Acc_table + "("
                 + Acc_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -60,17 +79,31 @@ public class DBHelper extends SQLiteOpenHelper {
                 + Acc_name + " TEXT NOT NULL, "
                 + Acc_balance + " INTEGER ," +
                 " FOREIGN KEY (" + Acc_user_id + ") REFERENCES " + usertable + "(" + userid + ") )");
+        userdb.execSQL(create_acc_table);
+        String create_record_table = ("CREATE TABLE " + Expense_table + "("
+                + Expense_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Expense_account_id + " INTEGER, "
+                + Expense_account + " TEXT NOT NULL,"
+                + Expense_type + " TEXT NOT NULL, "
+                + Expense_date + " TEXT, "
+                + Expense_amount + " DOUBLE, "
+                + Expense_category + " TEXT NOT NULL, "
+                + Expense_note + " TEXT, "
+                + "FOREIGN KEY (" + Expense_account_id + ") REFERENCES " + Acc_table + "(" + Acc_id + "))");
+        userdb.execSQL(create_record_table);
+
         // userdb.execSQL("Create table expense_records(expense_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,Expense_category TEXT NOT NULL,amount REAL NOT NULL,date TEXT NOT NULL,description TEXT NOT NULL ,FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
         // userdb.execSQL("Create table Budgets(budget_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,budget_name TEXT NOT NULL, total_amount REAL NOT NULL,start_date TEXT NOT NULL,end_date TEXT NOT NULL, FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
         //  userdb.execSQL("Create table Goals(goal_id INTEGER PRIMARY KEY,Username INTEGER NOT NULL,Account_id INTEGER NOT NULL,goal_name TEXT NOT NULL,goal_amount REAL NOT NULL,target_date TEXT NOT NULL,FOREIGN KEY (Account_id)REFERENCES Account(Account_id), FOREIGN KEY (Username)REFERENCES users(Username) )");
 
-        userdb.execSQL(create_acc_table);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase userdb, int old_ver, int new_ver) {
         userdb.execSQL("drop table if exists " + usertable);
         userdb.execSQL("drop table if exists " + Acc_table);
+        userdb.execSQL("drop table if exists "+ Expense_table);
 
         onCreate(userdb);
     }
@@ -92,6 +125,30 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
 
     }
+    public long CreateAccount(Integer userID, String accountName, Integer inbalance) {
+        SQLiteDatabase userdb = this.getWritableDatabase();
+        ContentValues Values = new ContentValues();
+        Values.put(Acc_user_id, userID);
+        Values.put(Acc_name, accountName);
+        Values.put(Acc_balance, inbalance);
+        return userdb.insert(Acc_table, null, Values);
+    }
+
+    public void insertExpense( int accid, String type, String account ,String date, int amount, String category, String note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Expense_account_id,accid);
+        values.put(Expense_type, type);
+        values.put(Expense_account, account);
+        values.put(Expense_date, date);
+        values.put(Expense_amount, amount);
+        values.put(Expense_category, category);
+        values.put(Expense_note, note);
+        db.insert(Expense_table, null, values);
+        db.close();
+    }
+
+
 
     public boolean checkusername(String Username) {
         SQLiteDatabase userdb = this.getWritableDatabase();
@@ -167,15 +224,46 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return acc_names;
     }
+    public ArrayList<transaction> fetch_transactions() {
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
 
-    public long CreateAccount(Integer userID, String accountName, Integer inbalance) {
-        SQLiteDatabase userdb = this.getWritableDatabase();
-        ContentValues Values = new ContentValues();
-        Values.put(Acc_user_id, userID);
-        Values.put(Acc_name, accountName);
-        Values.put(Acc_balance, inbalance);
-        return userdb.insert(Acc_table, null, Values);
+        // Select all transactions
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Expense_table, null);
+
+        // Loop through the cursor and add each transaction to the list
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(Expense_type));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex(Expense_category));
+                @SuppressLint("Range") String account=cursor.getString(cursor.getColumnIndex(Expense_account));
+                @SuppressLint("Range") String note = cursor.getString(cursor.getColumnIndex(Expense_note));
+                @SuppressLint("Range") String date=cursor.getString(cursor.getColumnIndex(Expense_date));
+                @SuppressLint("Range") Double amount = cursor.getDouble(cursor.getColumnIndex(Expense_amount));
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(Expense_id));
+
+                Date exdate = null;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                try {
+                    exdate = dateFormat.parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                transactions.add(new transaction(type, category, account,note,exdate,amount,id));
+            } while (cursor.moveToNext());
+        }
+
+        // Close the cursor and database
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return transactions;
     }
+
+
 
     public int getAccountId(String accName, int userId) {
         int accId = -1;

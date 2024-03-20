@@ -1,7 +1,11 @@
 package com.project.moneymind.views.fragements;
 
+import static android.content.Context.MODE_PRIVATE;
+import static android.widget.Toast.makeText;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -10,16 +14,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.project.moneymind.R;
 import com.project.moneymind.adapters.category_adapter;
+import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.databinding.FragmentAddTransactionFragementBinding;
 import com.project.moneymind.databinding.ListDialogBinding;
 import com.project.moneymind.models.Category;
@@ -33,6 +40,10 @@ import java.util.Calendar;
 public class AddTransactionFragement extends BottomSheetDialogFragment {
 
 TextInputEditText datebox;
+DBHelper db;
+String type,date,category,note;
+TextInputEditText Ex_type,Ex_date,Ex_amount,Ex_category,Ex_note;
+    int  amount;
     public AddTransactionFragement() {
         // Required empty public constructor
     }
@@ -40,6 +51,7 @@ TextInputEditText datebox;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
     }
@@ -51,6 +63,24 @@ TextInputEditText datebox;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding= FragmentAddTransactionFragementBinding.inflate(inflater);
+        db=new DBHelper(requireContext());
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", MODE_PRIVATE);
+       int acc_id = sharedPreferences.getInt("account_id", -1);
+       int  user_id = sharedPreferences.getInt("user_id", -1);
+
+        binding.saveTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                date=binding.Exdate.getText().toString();
+              amount= Integer.parseInt(binding.Examount.getText().toString());
+                category=binding.Excategory.getText().toString();
+                note=binding.Exnote.getText().toString();
+                db.insertExpense(acc_id,"Expense","Gpay",date,amount,category,note);
+                Toast.makeText(getContext(), "inserted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         binding.incomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +100,7 @@ TextInputEditText datebox;
 
         });
 
-        binding.date.setOnClickListener(new View.OnClickListener() {
+        binding.Exdate.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
@@ -87,7 +117,7 @@ TextInputEditText datebox;
 
                       String datetoshow= helper.formatdate(calendar.getTime());
 
-                        binding.date.setText(datetoshow);
+                        binding.Exdate.setText(datetoshow);
 
 
             }
@@ -95,7 +125,7 @@ TextInputEditText datebox;
                 datepicker.show();
             }
         });
-        binding.category.setOnClickListener(new View.OnClickListener() {
+        binding.Excategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ListDialogBinding dialogBinding=ListDialogBinding.inflate(inflater);
@@ -107,7 +137,7 @@ TextInputEditText datebox;
                     category_adapter categoryAdpater=new category_adapter(getContext(), constants.categories, new category_adapter.CategoryclickListener() {
                         @Override
                         public void oncategoryclicked(Category category) {
-                            binding.category.setText(category.getCategoryname());
+                            binding.Excategory.setText(category.getCategoryname());
                             categorydialog.dismiss();
                         }});
                     dialogBinding.recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));

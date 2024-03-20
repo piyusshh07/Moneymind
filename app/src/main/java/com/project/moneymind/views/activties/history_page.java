@@ -1,6 +1,7 @@
 package com.project.moneymind.views.activties;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.moneymind.R;
 import com.project.moneymind.adapters.transactions_adapter;
+import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.databinding.ActivityHistoryPageBinding;
 import com.project.moneymind.models.transaction;
 import com.project.moneymind.utils.constants;
@@ -22,6 +24,8 @@ import java.util.Date;
 public class history_page extends AppCompatActivity {
 ActivityHistoryPageBinding binding;
    RecyclerView transactionslist;
+   DBHelper db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +34,18 @@ ActivityHistoryPageBinding binding;
         binding=ActivityHistoryPageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         constants.setcategories();
+        db=new DBHelper(this);
 
-        ArrayList<transaction> transactions=new ArrayList<>();
-        transactions.add(new transaction("Income","Vehicle","Cash","note",new Date(),5000,2));
 
-        transactions_adapter adapter=new transactions_adapter(this,transactions);
+
+
+        ArrayList<transaction> transactions = db.fetch_transactions(); // Fetch transactions from the database
+        transactions_adapter adapter = new transactions_adapter(this, transactions);
         binding.transactionList.setLayoutManager(new LinearLayoutManager(this));
         binding.transactionList.setAdapter(adapter);
-
-
+        Log.d("transaction", String.valueOf(transactions));
     }
+
+
+
     }
