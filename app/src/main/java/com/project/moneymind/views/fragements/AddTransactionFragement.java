@@ -46,6 +46,7 @@ DBHelper db;
 String type,date,category,note;
 
     int  amount;
+    int Eamount;
     public AddTransactionFragement() {
         // Required empty public constructor
     }
@@ -53,10 +54,11 @@ String type,date,category,note;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if(getArguments() !=null);
 
 
     }
+    transaction transactions;
     FragmentAddTransactionFragementBinding binding;
 
 
@@ -70,6 +72,9 @@ String type,date,category,note;
        int acc_id = sharedPreferences.getInt("account_id", -1);
        int  user_id = sharedPreferences.getInt("user_id", -1);
 
+       transactions=new transaction();
+
+
         binding.saveTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,8 +83,12 @@ String type,date,category,note;
               amount= Integer.parseInt(binding.Examount.getText().toString());
                 category=binding.Excategory.getText().toString();
                 note=binding.Exnote.getText().toString();
-                db.insertExpense(acc_id,user_id,"Expense","Gpay",date,amount,category,note);
-                Toast.makeText(getContext(), "inserted", Toast.LENGTH_SHORT).show();
+
+                if(transactions.getType()==constants.Expense){
+                    amount=amount*(-1);
+                }
+                db.insertExpense(acc_id,user_id,transactions.getType(),"Gpay",date,amount,category,note);
+                Toast.makeText(getContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });
@@ -90,7 +99,7 @@ String type,date,category,note;
             public void onClick(View view) {
                 binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_income_selector));
                 binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
-
+                transactions.setType(constants.Income);
             }
         });
 
@@ -99,6 +108,7 @@ String type,date,category,note;
             public void onClick(View view) {
                 binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_expense_selector));
                 binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
+                transactions.setType(constants.Expense);
             }
         });
 
@@ -114,8 +124,7 @@ String type,date,category,note;
                         calendar.set(calendar.DAY_OF_MONTH, datepicker.getDatePicker().getDayOfMonth());
                         calendar.set(calendar.MONTH, datepicker.getDatePicker().getMonth());
                         calendar.set(calendar.YEAR, datepicker.getDatePicker().getYear());
-
-                      //  SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMMM yyyy");
+                        SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMMM yyyy");
 
                       String datetoshow= helper.formatdate(calendar.getTime());
 

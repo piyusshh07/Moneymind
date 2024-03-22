@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -31,6 +32,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
     int ACC_ID;
     int accuserid;
     AlertDialog dialog ;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,27 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
 
         createacc_btn=findViewById(R.id.create_btn);
+        AlertDialog.Builder build=new AlertDialog.Builder(accounts_page.this);
+        View vi=getLayoutInflater().inflate(R.layout.delete_dialog,null);
+        build.setView(vi);
+        alertDialog=build.create();
+       listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+               alertDialog.show();
+               return false;
+           }
+       });
 
+
+       TextView canceld=vi.findViewById(R.id.canceltext);
+        TextView delete=vi.findViewById(R.id.deletetext);
+        canceld.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
 
         Button create, cancel;
 

@@ -36,22 +36,27 @@ Context context;
     }
 
     @SuppressLint("ResourceAsColor")
+    
     @Override
     public void onBindViewHolder(@NonNull transactionViewHolder holder, int position) {
-        transaction  transaction=transactions.get(position);
+        transaction transaction = transactions.get(position);
         holder.binding.transactionAmount.setText(String.valueOf(transaction.getAmount()));
         holder.binding.transactionDate.setText(helper.formatdate(transaction.getDate()));
         holder.binding.transactionCategory.setText(transaction.getCategory());
+        holder.binding.accountLabel.setText(transaction.getAccount());
 
-        Category transactinCategory = constants.getcategorydetails(transaction.getCategory());
-        holder.binding.categoryIcon.setImageResource(transactinCategory.getCategoryimage());
+        Category transactionCategory = constants.getcategorydetails(transaction.getCategory());
+        if (transactionCategory != null) {
+            holder.binding.categoryIcon.setImageResource(transactionCategory.getCategoryimage());
+        }
 
-        if(transaction.getType().equals(constants.Income)){
-        holder.binding.transactionAmount.setTextColor(context.getColor(R.color.green));
+        if (transaction.getType().equals(constants.Income)) {
+            holder.binding.transactionAmount.setTextColor(context.getColor(R.color.green));
         } else if (transaction.getType().equals(constants.Expense)) {
             holder.binding.transactionAmount.setTextColor(context.getColor(R.color.red));
         }
     }
+
 
     @Override
     public int getItemCount() {
