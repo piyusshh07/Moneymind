@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -9,11 +9,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".views.activties.budget_goals"
+            android:exported="false"
+            android:theme="@style/Theme.actionbar"/>
         <activity
             android:name=".views.activties.history_page"
             android:exported="false"
-            android:theme="@style/Theme.actionbar"/>
+            android:theme="@style/Theme.actionbar" />
         <activity
             android:name=".views.activties.settings_page"
             android:exported="false"
@@ -37,7 +41,7 @@
         <activity
             android:name=".views.activties.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.splash" >
+            android:theme="@style/Theme.splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

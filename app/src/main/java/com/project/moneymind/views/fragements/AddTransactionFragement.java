@@ -32,6 +32,8 @@ import com.project.moneymind.databinding.ListDialogBinding;
 import com.project.moneymind.models.Category;
 import com.project.moneymind.utils.constants;
 import com.project.moneymind.utils.helper;
+import com.project.moneymind.models.transaction;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class AddTransactionFragement extends BottomSheetDialogFragment {
 TextInputEditText datebox;
 DBHelper db;
 String type,date,category,note;
-TextInputEditText Ex_type,Ex_date,Ex_amount,Ex_category,Ex_note;
+
     int  amount;
     public AddTransactionFragement() {
         // Required empty public constructor
@@ -76,8 +78,9 @@ TextInputEditText Ex_type,Ex_date,Ex_amount,Ex_category,Ex_note;
               amount= Integer.parseInt(binding.Examount.getText().toString());
                 category=binding.Excategory.getText().toString();
                 note=binding.Exnote.getText().toString();
-                db.insertExpense(acc_id,"Expense","Gpay",date,amount,category,note);
+                db.insertExpense(acc_id,user_id,"Expense","Gpay",date,amount,category,note);
                 Toast.makeText(getContext(), "inserted", Toast.LENGTH_SHORT).show();
+                dismiss();
             }
         });
 
@@ -87,6 +90,7 @@ TextInputEditText Ex_type,Ex_date,Ex_amount,Ex_category,Ex_note;
             public void onClick(View view) {
                 binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_income_selector));
                 binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
+
             }
         });
 
@@ -96,8 +100,6 @@ TextInputEditText Ex_type,Ex_date,Ex_amount,Ex_category,Ex_note;
                 binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_expense_selector));
                 binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
             }
-
-
         });
 
         binding.Exdate.setOnClickListener(new View.OnClickListener() {

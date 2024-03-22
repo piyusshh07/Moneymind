@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.fragements.Budget_frag"
+    android:background="@color/black">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Enter budget name"
+                android:id="@+id/budname"
+                android:textColorHint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_margin="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Enter Budget amount"
+                android:inputType="number"
+                android:id="@+id/bud_amount"
+                android:textColor="@color/white"
+                android:textColorHint="@color/blue"
+                android:layout_margin="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/buddate"
+                android:hint="Set Budget till"
+                android:textColor="@color/white"
+                android:textColorHint="@color/blue"
+                android:clickable="true"
+                android:layout_margin="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btncurve"
+            android:text="Add Budget"
+            android:id="@+id/addbudbtn"
+            android:layout_gravity="center"
+            android:layout_margin="50dp"
+            ></Button>
+    </LinearLayout>
+</FrameLayout>

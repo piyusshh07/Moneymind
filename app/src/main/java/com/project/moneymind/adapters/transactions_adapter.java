@@ -47,10 +47,9 @@ Context context;
         holder.binding.categoryIcon.setImageResource(transactinCategory.getCategoryimage());
 
         if(transaction.getType().equals(constants.Income)){
-        holder.binding.transactionAmount.setTextColor(R.color.green);
+        holder.binding.transactionAmount.setTextColor(context.getColor(R.color.green));
         } else if (transaction.getType().equals(constants.Expense)) {
-            holder.binding.transactionAmount.setTextColor(R.color.red);
-
+            holder.binding.transactionAmount.setTextColor(context.getColor(R.color.red));
         }
     }
 

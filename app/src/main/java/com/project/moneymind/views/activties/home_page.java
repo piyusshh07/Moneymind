@@ -16,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,7 +30,7 @@ public class home_page extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     String t1;
     TextView fname, balance ,acc_Name;
-    CardView ac_bal , Expensecard;
+    CardView ac_bal , Expensecard , Budget_GoalsCard;
     String us ,nameuser ;
 
     Integer acc_id,user_id ,acc_balance;
@@ -42,6 +40,7 @@ public class home_page extends AppCompatActivity {
     DBHelper db;
     FloatingActionButton fabtn;
      AlertDialog baldialog;
+
     double ba;
 
 
@@ -77,6 +76,7 @@ public class home_page extends AppCompatActivity {
         navigationView=findViewById(R.id.navigationview);
         fabtn=findViewById(R.id.fab);
         Expensecard=findViewById(R.id.history);
+        Budget_GoalsCard=findViewById(R.id.bud_goal);
 
 
         //sharedpreference code
@@ -141,6 +141,15 @@ public class home_page extends AppCompatActivity {
                 startActivity(his_page);
             }
         });
+
+        Intent budget_Goal=new Intent(home_page.this, budget_goals.class);
+        Budget_GoalsCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(budget_Goal);
+            }
+        });
+
         if(getSupportActionBar()!=null){
         }
         toolbar.setTitle("Home");

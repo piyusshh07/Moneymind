@@ -5,14 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.health.connect.datatypes.Record;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.project.moneymind.models.transaction;
-import com.project.moneymind.views.activties.home_page;
-import com.project.moneymind.views.activties.registration_page;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +48,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String Expense_note="expense_note";
     public static final  String Expense_account="expense_account";
+    public static final String Expense_Acc_user_id="expense_acc_user_id";
+
 
 
 
@@ -83,12 +82,14 @@ public class DBHelper extends SQLiteOpenHelper {
         String create_record_table = ("CREATE TABLE " + Expense_table + "("
                 + Expense_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Expense_account_id + " INTEGER, "
+                + Expense_Acc_user_id +" INTEGER, "
                 + Expense_account + " TEXT NOT NULL,"
                 + Expense_type + " TEXT NOT NULL, "
                 + Expense_date + " TEXT, "
                 + Expense_amount + " DOUBLE, "
                 + Expense_category + " TEXT NOT NULL, "
                 + Expense_note + " TEXT, "
+                + "FOREIGN KEY (" + Expense_Acc_user_id + ") REFERENCES " + Acc_table + "(" + Acc_user_id + "), "
                 + "FOREIGN KEY (" + Expense_account_id + ") REFERENCES " + Acc_table + "(" + Acc_id + "))");
         userdb.execSQL(create_record_table);
 
@@ -134,10 +135,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return userdb.insert(Acc_table, null, Values);
     }
 
-    public void insertExpense( int accid, String type, String account ,String date, int amount, String category, String note) {
+    public void insertExpense( int accid,int accuser_id, String type, String account ,String date, int amount, String category, String note) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Expense_account_id,accid);
+        values.put(Expense_Acc_user_id,accuser_id);
         values.put(Expense_type, type);
         values.put(Expense_account, account);
         values.put(Expense_date, date);
@@ -224,12 +226,12 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return acc_names;
     }
-    public ArrayList<transaction> fetch_transactions() {
+    public ArrayList<transaction> fetch_transactions(int acc_id, int user_id) {
         ArrayList<transaction> transactions = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Select all transactions
-        Cursor cursor = db.rawQuery("SELECT * FROM " + Expense_table, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Expense_table + " WHERE " + Expense_account_id + "=? AND " + Expense_Acc_user_id+ "=?", new String[]{String.valueOf(acc_id), String.valueOf(user_id)});
 
         // Loop through the cursor and add each transaction to the list
         if (cursor != null && cursor.moveToFirst()) {

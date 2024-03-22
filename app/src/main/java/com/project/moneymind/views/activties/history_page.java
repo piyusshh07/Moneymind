@@ -1,5 +1,6 @@
 package com.project.moneymind.views.activties;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,10 +37,12 @@ ActivityHistoryPageBinding binding;
         constants.setcategories();
         db=new DBHelper(this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+     int   acc_id = sharedPreferences.getInt("account_id", -1);
+     int   user_id = sharedPreferences.getInt("user_id", -1);
 
 
-
-        ArrayList<transaction> transactions = db.fetch_transactions(); // Fetch transactions from the database
+        ArrayList<transaction> transactions = db.fetch_transactions(acc_id,user_id); // Fetch transactions from the database
         transactions_adapter adapter = new transactions_adapter(this, transactions);
         binding.transactionList.setLayoutManager(new LinearLayoutManager(this));
         binding.transactionList.setAdapter(adapter);

@@ -3,10 +3,10 @@ package com.project.moneymind.models;
 import java.util.Date;
 
 public class transaction   {
-    private String type,category,account,note;
-    private Date date;
-    private double amount;
-    private long id;
+    public String type,category,account,note;
+    public Date date;
+    public double amount;
+    public long id;
 
     public transaction(String type, String category, String account, String note, Date date, double amount, long id) {
         this.type = type;
@@ -18,7 +18,7 @@ public class transaction   {
         this.id = id;
     }
 
-    public void setType(String type) {
+    public  void setType(String type) {
         this.type = type;
     }
 
