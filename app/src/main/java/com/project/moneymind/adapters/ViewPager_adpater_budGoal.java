@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.project.moneymind.views.fragements.Budget_frag;
-import com.project.moneymind.views.fragements.Goal_frag;
+import com.project.moneymind.Budget_frag;
+import com.project.moneymind.Goals_frag;
 
 public class ViewPager_adpater_budGoal extends FragmentPagerAdapter{
     public ViewPager_adpater_budGoal(@NonNull FragmentManager fm) {
@@ -19,7 +19,7 @@ public class ViewPager_adpater_budGoal extends FragmentPagerAdapter{
         if (position==0){
             return new Budget_frag();
         }else {
-            return new Goal_frag();
+            return new Goals_frag();
         }
 
     }

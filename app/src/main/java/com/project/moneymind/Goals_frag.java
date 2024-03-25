@@ -1,4 +1,4 @@
-package com.project.moneymind.views.fragements;
+package com.project.moneymind;
 
 import android.os.Bundle;
 
@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.project.moneymind.R;
 
-public class Goal_frag extends Fragment {
+public class Goals_frag extends Fragment {
 
 
-    public Goal_frag() {
-        // Required empty public constructor
+    public Goals_frag() {
+
     }
 
 
@@ -22,12 +21,13 @@ public class Goal_frag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_goal_frag, container, false);
+        return inflater.inflate(R.layout.fragment_goals_frag, container, false);
     }
 }

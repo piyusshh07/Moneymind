@@ -141,12 +141,12 @@ public class home_page extends AppCompatActivity {
                 startActivity(his_page);
             }
         });
-
-        Intent budget_Goal=new Intent(home_page.this, budget_goals.class);
         Budget_GoalsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(budget_Goal);
+                Intent budgoals=new Intent(home_page.this, budget_goals.class);
+                startActivity(budgoals);
+
             }
         });
 

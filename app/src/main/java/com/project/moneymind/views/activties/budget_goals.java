@@ -27,7 +27,7 @@ public class budget_goals extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
             viewPager= findViewById(R.id.viewpager);
-            tab=findViewById(R.id.tabLayout);
+            tab=findViewById(R.id.tablayout);
 
             ViewPager_adpater_budGoal adapter=new ViewPager_adpater_budGoal(getSupportFragmentManager());
 

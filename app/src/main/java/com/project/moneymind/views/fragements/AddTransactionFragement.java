@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.project.moneymind.models.Category;
 import com.project.moneymind.utils.constants;
 import com.project.moneymind.utils.helper;
 import com.project.moneymind.models.transaction;
+import com.project.moneymind.views.activties.accounts_page;
 
 
 import java.text.SimpleDateFormat;
@@ -43,7 +46,10 @@ public class AddTransactionFragement extends BottomSheetDialogFragment {
 
 TextInputEditText datebox;
 DBHelper db;
-String type,date,category,note;
+String type,date,category,note,account;
+AlertDialog alertDialog;
+RadioGroup radioGroup;
+RadioButton radioButton;
 
     int  amount;
     int Eamount;
@@ -60,6 +66,7 @@ String type,date,category,note;
     }
     transaction transactions;
     FragmentAddTransactionFragementBinding binding;
+    double nacba;
 
 
     @Override
@@ -83,11 +90,12 @@ String type,date,category,note;
               amount= Integer.parseInt(binding.Examount.getText().toString());
                 category=binding.Excategory.getText().toString();
                 note=binding.Exnote.getText().toString();
-
+                 account=binding.Exaccount.getText().toString();
+                double acbal=db.getAccountBalanceById(acc_id,user_id);
                 if(transactions.getType()==constants.Expense){
                     amount=amount*(-1);
                 }
-                db.insertExpense(acc_id,user_id,transactions.getType(),"Gpay",date,amount,category,note);
+                db.insertExpense(acc_id,user_id,transactions.getType(),account,date,amount,category,note);
                 Toast.makeText(getContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
@@ -158,6 +166,38 @@ String type,date,category,note;
 
             }
         });
+        AlertDialog.Builder builder= new AlertDialog.Builder(getContext());
+        View view=getLayoutInflater().inflate(R.layout.accountype,null);
+        builder.setView(view);
+        alertDialog=builder.create();
+       radioGroup=view.findViewById(R.id.radiogroup);
+
+        binding.Exaccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder= new AlertDialog.Builder(getContext());
+                View dialogView=getLayoutInflater().inflate(R.layout.accountype,null);
+                builder.setView(dialogView);
+                alertDialog=builder.create();
+                RadioGroup radioGroup=dialogView.findViewById(R.id.radiogroup);
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        RadioButton radioButton = dialogView.findViewById(checkedId);
+                        if (radioButton != null) {
+                            binding.Exaccount.setText(radioButton.getText());
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
+
+
+
         return binding.getRoot();
     }
 
