@@ -17,7 +17,7 @@
         <activity
             android:name=".views.activties.history_page"
             android:exported="false"
-            android:theme="@style/Theme.actionbar" />
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".views.activties.settings_page"
             android:exported="false"

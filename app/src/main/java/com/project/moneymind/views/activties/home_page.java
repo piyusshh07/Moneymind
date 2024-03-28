@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -21,12 +23,15 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.project.moneymind.ViewModel.MainViewModel;
+import com.project.moneymind.models.transaction;
 import com.project.moneymind.views.fragements.AddTransactionFragement;
 import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.R;
 
 public class home_page extends AppCompatActivity {
 
+    public MainViewModel viewModel;
     @SuppressLint("MissingInflatedId")
     String t1;
     TextView fname, balance ,acc_Name;
@@ -42,6 +47,7 @@ public class home_page extends AppCompatActivity {
      AlertDialog baldialog;
 
     double ba;
+
 
 
 
@@ -78,12 +84,19 @@ public class home_page extends AppCompatActivity {
         Expensecard=findViewById(R.id.history);
         Budget_GoalsCard=findViewById(R.id.bud_goal);
 
+        transaction transactions=new transaction();
 
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         //sharedpreference code
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
         user_id = sharedPreferences.getInt("user_id", -1);
         nameuser = sharedPreferences.getString("username","fnameuser");
+
+        transactions.setAcid(acc_id);
+        transactions.setUser_id(user_id);
+        Log.d("ids",String.valueOf(transactions.getAcid()));
+        Log.d("ids",String.valueOf(transactions.getUser_id()));
 
         Intent his_page=new Intent(home_page.this, history_page.class);
         db=new DBHelper(home_page.this);
@@ -94,7 +107,7 @@ public class home_page extends AppCompatActivity {
 // If acc_id and user_id are correct, use them to get account balance
         if (acc_id != -1 && user_id != -1) {
             acc_balance = (int) db.getAccountBalanceById(acc_id, user_id);
-            balance.setText(String.valueOf(acc_balance));
+
         } else {
             // Handle the case where acc_id or user_id is -1
             Log.e("Error", "Invalid acc_id or user_id");
@@ -102,8 +115,13 @@ public class home_page extends AppCompatActivity {
 
 
 
-
-      balance.setText(String.valueOf(acc_balance));
+        viewModel.totalAccountBalance.observe(this, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                balance.setText(String.valueOf(aDouble));
+                Log.d("income", String.valueOf(viewModel.totalIncome));
+            }
+        });
         String name=db.getfname(user_id);
     fname.setText("Hello "+ name);
 
@@ -155,46 +173,9 @@ public class home_page extends AppCompatActivity {
         toolbar.setTitle("Home");
 
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(home_page.this);
-        View v = getLayoutInflater().inflate(R.layout.balance_update_dialog,null);
-        builder.setView(v);
-        baldialog = builder.create();
-        ac_bal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                baldialog.show();
-            }
-        });
-
-        TextView upadte_bal , cancel_bal;
-        upadte_bal=v.findViewById(R.id.update_bal_dialog);
-        cancel_bal=v.findViewById(R.id.cancel_text_dialog);
-        upadte_bal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Find the TextInputEditText from the inflated view
-                TextInputEditText newbaltext = v.findViewById(R.id.newbaledt);
-                if (newbaltext != null) {
-                    String newbal = newbaltext.getText().toString();
-                     ba = Double.parseDouble(newbal);
-                    db.updateAccountBalance(acc_id, user_id, ba);
-                    baldialog.cancel();
-                    balance.setText((int) ba);
-                } else {
-                    Log.e("Error", "TextInputEditText not found in dialog layout");
-                }
-            }
-        });
-
-
-        cancel_bal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                baldialog.cancel();
-            }
-        });
-
 
     }
 
+    public void getTransaction() {
+    }
 }

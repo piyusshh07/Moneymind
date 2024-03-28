@@ -3,14 +3,18 @@ package com.project.moneymind.models;
 import java.util.Date;
 
 public class transaction   {
-    public String type,category,account,note;
-    public Date date;
-    public double amount;
-    public long id;
-public transaction(){
+    private  static int user_id;
+    private static int acid;
+    private String type,category,account,note;
+    private static Date date;
+    private double amount;
+    private static long id;
+public  transaction( ){
 
 }
-    public transaction(String type, String category, String account, String note, Date date, double amount, long id) {
+    public transaction(int acid,int user_id,String type, String category, String account, String note, Date date, double amount, long id) {
+      this.acid=acid;
+      this.user_id=user_id;
         this.type = type;
         this.category = category;
         this.account = account;
@@ -24,6 +28,8 @@ public transaction(){
         this.type = type;
     }
 
+    public  void setAcid(int acid){this.acid=acid;}
+    public void setUser_id(int user_id){this.user_id=user_id;}
     public void setCategory(String category) {
         this.category = category;
     }
@@ -64,15 +70,17 @@ public transaction(){
         return note;
     }
 
-    public Date getDate() {
+    public static Date getDate() {
         return date;
     }
 
     public double getAmount() {
         return amount;
     }
+    public int getUser_id(){return user_id;};
+public int getAcid(){return acid;};
 
-    public long getId() {
+    public static long getId() {
         return id;
     }
 }

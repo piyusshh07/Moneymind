@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Daily_frag">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grey"
+        tools:ignore="MissingConstraints">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:padding="5dp"
+                android:layout_marginLeft="20dp">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expense"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:translationX="90dp"
+                android:padding="5dp">
+            </TextView> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:translationX="190dp"
+            android:padding="5dp"
+            android:layout_marginRight="10dp">
+        </TextView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:layout_marginLeft="30dp"
+                android:id="@+id/incomelabel">
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:translationX="120dp"
+                android:id="@+id/expenselabel"
+                >
+            </TextView> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:translationX="230dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/totallabel">
+        </TextView>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecordList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        tools:listitem="@layout/history_record">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

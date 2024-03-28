@@ -10,15 +10,18 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.project.moneymind.models.transaction;
+import com.project.moneymind.utils.helper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Logins.db";
-    public static final int version = 10;
+    public static final int version = 11;
     //user login
     public static final String userid = "Userid";
     public static final String username = "Username";
@@ -135,21 +138,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return userdb.insert(Acc_table, null, Values);
     }
 
-    public void insertExpense( int accid,int accuser_id, String type, String account ,String date, int amount, String category, String note) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(Expense_account_id,accid);
-        values.put(Expense_Acc_user_id,accuser_id);
-        values.put(Expense_type, type);
-        values.put(Expense_account, account);
-        values.put(Expense_date, date);
-        values.put(Expense_amount, amount);
-        values.put(Expense_category, category);
-        values.put(Expense_note, note);
-        db.insert(Expense_table, null, values);
-        db.close();
-    }
-
 
 
     public boolean checkusername(String Username) {
@@ -226,44 +214,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return acc_names;
     }
-    public ArrayList<transaction> fetch_transactions(int acc_id, int user_id) {
-        ArrayList<transaction> transactions = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        // Select all transactions
-        Cursor cursor = db.rawQuery("SELECT * FROM " + Expense_table + " WHERE " + Expense_account_id + "=? AND " + Expense_Acc_user_id+ "=?", new String[]{String.valueOf(acc_id), String.valueOf(user_id)});
-
-        // Loop through the cursor and add each transaction to the list
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                @SuppressLint("Range") String type = cursor.getString(cursor.getColumnIndex(Expense_type));
-                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex(Expense_category));
-                @SuppressLint("Range") String account=cursor.getString(cursor.getColumnIndex(Expense_account));
-                @SuppressLint("Range") String note = cursor.getString(cursor.getColumnIndex(Expense_note));
-                @SuppressLint("Range") String date=cursor.getString(cursor.getColumnIndex(Expense_date));
-                @SuppressLint("Range") Double amount = cursor.getDouble(cursor.getColumnIndex(Expense_amount));
-                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(Expense_id));
-
-                Date exdate = null;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                try {
-                    exdate = dateFormat.parse(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                transactions.add(new transaction(type, category, account,note,exdate,amount,id));
-            } while (cursor.moveToNext());
-        }
-
-        // Close the cursor and database
-        if (cursor != null) {
-            cursor.close();
-        }
-        db.close();
-
-        return transactions;
-    }
 
 
 
@@ -281,6 +232,33 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return accId;
     }
+    public long addtransaction(transaction Transaction, int acc_id, int user_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String formattedDate = helper.formatdate(Transaction.getDate());
+        values.put(Expense_account_id, acc_id);
+        values.put(Expense_Acc_user_id, user_id);
+        values.put(Expense_type, Transaction.getType());
+        values.put(Expense_category, Transaction.getCategory());
+        values.put(Expense_account, Transaction.getAccount());
+        values.put(Expense_amount, Transaction.getAmount());
+        values.put(Expense_note, Transaction.getNote());
+        values.put(Expense_date, formattedDate);
+
+        return db.insert(Expense_table, null, values);
+    }
+
+
+
+
+    public void deleteTransaction(transaction Transaction, int acc_id, int user_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long transactionId = Transaction.getId();
+        String[] whereArgs = new String[]{String.valueOf(transactionId)};
+        String sql = "DELETE FROM " + Expense_table + " WHERE " + Expense_id + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        db.execSQL(sql, new String[]{String.valueOf(transactionId), String.valueOf(acc_id), String.valueOf(user_id)});
+    }
+
 
 
 
@@ -346,6 +324,696 @@ public class DBHelper extends SQLiteOpenHelper {
         return rowsAffected > 0;
 
     }
+
+
+
+    public Boolean delete_account(String acc_name, int usr_id) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        int rowdeleted = db.delete(Acc_table, Acc_user_id + "=? And " + Acc_name + "=? ", new String[]{String.valueOf(usr_id), acc_name});
+
+        if (rowdeleted > 0) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public Boolean edit_account(int acc_id, int usr_id, String newacc_name) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Acc_name, newacc_name);
+        int rowedited = db.update(Acc_table, values, Acc_id + " = ? And " + Acc_user_id + "= ?", new String[]{String.valueOf(acc_id), String.valueOf(usr_id)});
+        if (rowedited > 0) {
+            return true;
+        }
+        return false;
+
+
+    }
+
+    // Method to fetch transaction details for a specific account ID and return as a list of Transaction objects
+  /*  public ArrayList<transaction> getTransactionDetailsForAccount(Calendar calendar) {
+
+        String formattedDate= null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.formatdate(calendar.getTime());
+        }
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String rawQuery = "SELECT * FROM " + Expense_table +" WHERE "+ Expense_date +" = ? ";
+        String[] selectionArgs = {formattedDate};
+        Cursor cursor = db.rawQuery(rawQuery, selectionArgs);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = -1;
+                int acid=-1;
+                int user_id=-1;
+                String type = null;
+                String category = null;
+                String account = null;
+                double amount = 0.0;
+                String note = null;
+                Date date = null;
+
+                int idIndex = cursor.getColumnIndex(Expense_id);
+                if (idIndex >= 0) {
+                    id = cursor.getLong(idIndex);
+                }
+                int AcidIndex=cursor.getColumnIndex(Expense_account_id);
+                if(AcidIndex>=0){
+                    acid=cursor.getInt(AcidIndex);
+
+                }
+                int useridIndex = cursor.getColumnIndex(Expense_Acc_user_id);
+                if (useridIndex >= 0) {
+                    user_id = cursor.getInt(useridIndex);
+                }
+
+
+                int typeIndex = cursor.getColumnIndex(Expense_type);
+                if (typeIndex >= 0) {
+                    type = cursor.getString(typeIndex);
+                }
+
+                int categoryIndex = cursor.getColumnIndex(Expense_category);
+                if (categoryIndex >= 0) {
+                    category = cursor.getString(categoryIndex);
+                }
+
+                int accountIndex = cursor.getColumnIndex(Expense_account);
+                if (accountIndex >= 0) {
+                    account = cursor.getString(accountIndex);
+                }
+
+                int amountIndex = cursor.getColumnIndex(Expense_amount);
+                if (amountIndex >= 0) {
+                    amount = cursor.getDouble(amountIndex);
+                }
+
+                int noteIndex = cursor.getColumnIndex(Expense_note);
+                if (noteIndex >= 0) {
+                    note = cursor.getString(noteIndex);
+                }
+
+                int dateIndex = cursor.getColumnIndex(Expense_date);
+                if (dateIndex >= 0) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM,yy", Locale.getDefault());
+                        date = dateFormat.parse(cursor.getString(dateIndex));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        // Handle parsing exception
+                    }
+
+
+                }
+
+                transaction Transaction = new transaction(acid,user_id,type, category, note, account, date, amount, id );
+
+                transactions.add(Transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }*/
+    public ArrayList<transaction> getTransactionDetailsForAccount(int acc_id, int userid, Calendar calendar) {
+        String formattedDate = helper.formatdate(calendar.getTime());
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String rawQuery = "SELECT * FROM " + Expense_table + " WHERE " + Expense_date + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        String[] selectionArgs = {formattedDate, String.valueOf(acc_id), String.valueOf(userid)};
+        Cursor cursor = db.rawQuery(rawQuery, selectionArgs);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = -1;
+                int acid=-1;
+                int user_id=-1;
+                String type = null;
+                String category = null;
+                String account = null;
+                double amount = 0.0;
+                String note = null;
+                Date date = null;
+
+                int idIndex = cursor.getColumnIndex(Expense_id);
+                if (idIndex >= 0) {
+                    id = cursor.getLong(idIndex);
+                }
+                int AcidIndex=cursor.getColumnIndex(Expense_account_id);
+                if(AcidIndex>=0){
+                    acid=cursor.getInt(AcidIndex);
+
+                }
+                int useridIndex = cursor.getColumnIndex(Expense_Acc_user_id);
+                if (useridIndex >= 0) {
+                    user_id = cursor.getInt(useridIndex);
+                }
+
+
+                int typeIndex = cursor.getColumnIndex(Expense_type);
+                if (typeIndex >= 0) {
+                    type = cursor.getString(typeIndex);
+                }
+
+                int categoryIndex = cursor.getColumnIndex(Expense_category);
+                if (categoryIndex >= 0) {
+                    category = cursor.getString(categoryIndex);
+                }
+
+                int accountIndex = cursor.getColumnIndex(Expense_account);
+                if (accountIndex >= 0) {
+                    account = cursor.getString(accountIndex);
+                }
+
+                int amountIndex = cursor.getColumnIndex(Expense_amount);
+                if (amountIndex >= 0) {
+                    amount = cursor.getDouble(amountIndex);
+                }
+
+                int noteIndex = cursor.getColumnIndex(Expense_note);
+                if (noteIndex >= 0) {
+                    note = cursor.getString(noteIndex);
+                }
+
+                int dateIndex = cursor.getColumnIndex(Expense_date);
+                if (dateIndex >= 0) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM,yy", Locale.getDefault());
+                        date = dateFormat.parse(cursor.getString(dateIndex));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        // Handle parsing exception
+                    }
+
+
+                }
+
+                transaction Transaction = new transaction(acid,user_id,type, category, note, account, date, amount, id );
+
+                transactions.add(Transaction);
+                // Parse the cursor and create transactions as before
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }
+
+    public ArrayList<transaction> getTransactionDetailsOfDayChart(Calendar calendar, String Type, int acc_id, int userid) {
+
+        String formattedDate= null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.formatdate(calendar.getTime());
+        }
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String rawQuery = "SELECT * FROM " + Expense_table +" WHERE "+ Expense_date +" = ? AND " + Expense_type + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        String[] selectionArgs = {formattedDate, Type, String.valueOf(acc_id), String.valueOf(userid)};
+        Cursor cursor = db.rawQuery(rawQuery, selectionArgs);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = -1;
+                int acid=-1;
+                int user_id=-1;
+                String type = null;
+                String category = null;
+                String account = null;
+                double amount = 0.0;
+                String note = null;
+                Date date = null;
+
+                int idIndex = cursor.getColumnIndex(Expense_id);
+                if (idIndex >= 0) {
+                    id = cursor.getLong(idIndex);
+                }
+                int AcidIndex=cursor.getColumnIndex(Expense_account_id);
+                if(AcidIndex>=0){
+                    acid=cursor.getInt(AcidIndex);
+
+                }
+                int useridIndex = cursor.getColumnIndex(Expense_Acc_user_id);
+                if (useridIndex >= 0) {
+                    user_id = cursor.getInt(useridIndex);
+                }
+
+                int typeIndex = cursor.getColumnIndex(Expense_type);
+                if (typeIndex >= 0) {
+                    type = cursor.getString(typeIndex);
+                }
+
+                int categoryIndex = cursor.getColumnIndex(Expense_category);
+                if (categoryIndex >= 0) {
+                    category = cursor.getString(categoryIndex);
+                }
+
+                int accountIndex = cursor.getColumnIndex(Expense_account);
+                if (accountIndex >= 0) {
+                    account = cursor.getString(accountIndex);
+                }
+
+                int amountIndex = cursor.getColumnIndex(Expense_amount);
+                if (amountIndex >= 0) {
+                    amount = cursor.getDouble(amountIndex);
+                }
+
+                int noteIndex = cursor.getColumnIndex(Expense_note);
+                if (noteIndex >= 0) {
+                    note = cursor.getString(noteIndex);
+                }
+
+                int dateIndex = cursor.getColumnIndex(Expense_date);
+                if (dateIndex >= 0) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM,yy", Locale.getDefault());
+                        date = dateFormat.parse(cursor.getString(dateIndex));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        // Handle parsing exception
+                    }
+
+
+                }
+
+                transaction Transaction = new transaction(acid,user_id,type, category, note, account, date, amount, id);
+
+                transactions.add(Transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }
+
+    public ArrayList<transaction> getTransactionDetailsOfMonths(Calendar calendar, int acc_id, int userid) {
+
+        String formattedDate= null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.format_date_month(calendar.getTime());
+        }
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Assuming tableName and dateColumnName are String variables representing the table name and date column respectively
+
+        String query = "SELECT * FROM " + Expense_table +
+                " WHERE " + Expense_date + " LIKE ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+
+
+        Cursor cursor = db.rawQuery(query, new String[]{"% " + formattedDate, String.valueOf(acc_id), String.valueOf(userid)});
+
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = -1;
+                int acid=-1;
+                int user_id=-1;
+                String type = null;
+                String category = null;
+                String account = null;
+                double amount = 0.0;
+                String note = null;
+                Date date = null;
+
+                int idIndex = cursor.getColumnIndex(Expense_id);
+                if (idIndex >= 0) {
+                    id = cursor.getLong(idIndex);
+                }
+                int AcidIndex=cursor.getColumnIndex(Expense_account_id);
+                if(AcidIndex>=0){
+                    acid=cursor.getInt(AcidIndex);
+
+                }
+                int useridIndex = cursor.getColumnIndex(Expense_Acc_user_id);
+                if (useridIndex >= 0) {
+                    user_id = cursor.getInt(useridIndex);
+                }
+
+                int typeIndex = cursor.getColumnIndex(Expense_type);
+                if (typeIndex >= 0) {
+                    type = cursor.getString(typeIndex);
+                }
+
+                int categoryIndex = cursor.getColumnIndex(Expense_category);
+                if (categoryIndex >= 0) {
+                    category = cursor.getString(categoryIndex);
+                }
+
+                int accountIndex = cursor.getColumnIndex(Expense_account);
+                if (accountIndex >= 0) {
+                    account = cursor.getString(accountIndex);
+                }
+
+                int amountIndex = cursor.getColumnIndex(Expense_amount);
+                if (amountIndex >= 0) {
+                    amount = cursor.getDouble(amountIndex);
+                }
+
+                int noteIndex = cursor.getColumnIndex(Expense_note);
+                if (noteIndex >= 0) {
+                    note = cursor.getString(noteIndex);
+                }
+
+                int dateIndex = cursor.getColumnIndex(Expense_date);
+                if (dateIndex >= 0) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM,yy", Locale.getDefault());
+                        date = dateFormat.parse(cursor.getString(dateIndex));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        // Handle parsing exception
+                    }
+
+
+                }
+
+                transaction Transaction = new transaction(acid,user_id,type, category, note, account, date, amount, id);
+
+                transactions.add(Transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }
+
+    public ArrayList<transaction> getTransactionDetailsOfMonthsChart(Calendar calendar, String Type, int acc_id, int userid) {
+
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.format_date_month(calendar.getTime());
+        }
+        ArrayList<transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + Expense_table +
+                " WHERE " + Expense_date + " LIKE ? AND " + Expense_type + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+
+        String[] selectionArgs = {"%" + formattedDate, Type, String.valueOf(acc_id), String.valueOf(userid)};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = -1;
+                int acid = -1;
+                int user_id = -1;
+                String type = null;
+                String category = null;
+                String account = null;
+                double amount = 0.0;
+                String note = null;
+                Date date = null;
+
+                int idIndex = cursor.getColumnIndex(Expense_id);
+                if (idIndex >= 0) {
+                    id = cursor.getLong(idIndex);
+                }
+                int AcidIndex = cursor.getColumnIndex(Expense_account_id);
+                if (AcidIndex >= 0) {
+                    acid = cursor.getInt(AcidIndex);
+
+                }
+                int useridIndex = cursor.getColumnIndex(Expense_Acc_user_id);
+                if (useridIndex >= 0) {
+                    user_id = cursor.getInt(useridIndex);
+                }
+
+                int typeIndex = cursor.getColumnIndex(Expense_type);
+                if (typeIndex >= 0) {
+                    type = cursor.getString(typeIndex);
+                }
+
+                int categoryIndex = cursor.getColumnIndex(Expense_category);
+                if (categoryIndex >= 0) {
+                    category = cursor.getString(categoryIndex);
+                }
+
+                int accountIndex = cursor.getColumnIndex(Expense_account);
+                if (accountIndex >= 0) {
+                    account = cursor.getString(accountIndex);
+                }
+
+                int amountIndex = cursor.getColumnIndex(Expense_amount);
+                if (amountIndex >= 0) {
+                    amount = cursor.getDouble(amountIndex);
+                }
+
+                int noteIndex = cursor.getColumnIndex(Expense_note);
+                if (noteIndex >= 0) {
+                    note = cursor.getString(noteIndex);
+                }
+
+                int dateIndex = cursor.getColumnIndex(Expense_date);
+                if (dateIndex >= 0) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM,yy", Locale.getDefault());
+                        date = dateFormat.parse(cursor.getString(dateIndex));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        // Handle parsing exception
+                    }
+
+
+                }
+
+                transaction Transaction = new transaction(acid, user_id, type, category, note, account, date, amount, id);
+
+                transactions.add(Transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }
+
+
+    public double getTotalIncomeForDate(Calendar calendar, int acc_id, int user_id) {
+        double totalIncome = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.formatdate(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_income FROM " + Expense_table+ " WHERE " + Expense_date + " = ? AND " + Expense_type + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        String[] selectionArgs = {formattedDate, "Income", String.valueOf(acc_id), String.valueOf(user_id)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_income");
+            if (columnIndex >= 0) {
+                totalIncome = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalIncome;
+    }
+
+
+    public double getTotalIncomeForMonth(Calendar calendar, int acc_id, int user_id) {
+        double totalIncome = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.format_date_month(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_income FROM " +
+                Expense_table + " WHERE " +
+                Expense_date + " LIKE ? AND " +
+                Expense_type + " = ? AND " +
+                Expense_account_id + " = ? AND " +
+                Expense_Acc_user_id + " = ?";
+
+        String[] selectionArgs = {"%" + formattedDate, "Income", String.valueOf(acc_id), String.valueOf(user_id)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_income");
+            if (columnIndex >= 0) {
+                totalIncome = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalIncome;
+    }
+
+    public double getTotalExpenseForDate(Calendar calendar, int acc_id, int user_id) {
+        double totalExpense = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.formatdate(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_expense FROM " + Expense_table +
+                " WHERE " + Expense_date + " = ? AND " + Expense_type + " = ? AND " +
+                Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        String[] selectionArgs = {formattedDate, "Expense", String.valueOf(acc_id), String.valueOf(user_id)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_expense");
+            if (columnIndex >= 0) {
+                totalExpense = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalExpense;
+    }
+
+
+    public double getTotalExpenseForMonth(Calendar calendar, int acc_id, int user_id) {
+        double totalExpense = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.format_date_month(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_expense FROM " +
+                Expense_table + " WHERE " +
+                Expense_date + " LIKE ? AND " +
+                Expense_type + " = ? AND " +
+                Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+
+        String[] selectionArgs = {"% " + formattedDate, "Expense", String.valueOf(acc_id), String.valueOf(user_id)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_expense");
+            if (columnIndex >= 0) {
+                totalExpense = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalExpense;
+    }
+
+    public double getTotalAccountForDate(Calendar calendar, int acc_id, int user_id) {
+        double totalAccount = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.formatdate(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_expense FROM " + Expense_table+ " WHERE " + Expense_date + " = ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+        String[] selectionArgs = {formattedDate, String.valueOf(acc_id), String.valueOf(user_id)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_expense");
+            if (columnIndex >= 0) {
+                totalAccount = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalAccount;
+    }
+
+    public double getTotalAccountForMonth(Calendar calendar, int acc_id, int user_id) {
+        double totalAccount = 0;
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            formattedDate = helper.format_date_month(calendar.getTime());
+        }
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_expense FROM " +
+                Expense_table + " WHERE " +
+                Expense_date + " LIKE ? AND " + Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+
+
+        String[] selectionArgs = {"% " + formattedDate, String.valueOf(acc_id), String.valueOf(user_id)};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_expense");
+            if (columnIndex >= 0) {
+                totalAccount = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Close the database connection
+        db.close();
+
+        return totalAccount;
+    }
+
+    public double getTotalAccountBalance(int acc_id, int user_id) {
+        double totalBalanceAccount = 0;
+
+        // Create your SQLite query to fetch total income for the given date
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT SUM(" + Expense_amount + ") AS total_expense FROM " +
+                Expense_table + " WHERE " +
+                Expense_account_id + " = ? AND " + Expense_Acc_user_id + " = ?";
+
+        String[] selectionArgs = {String.valueOf(acc_id), String.valueOf(user_id)};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Retrieve the sum of income from the cursor
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("total_expense");
+            if (columnIndex >= 0) {
+                totalBalanceAccount = cursor.getDouble(columnIndex);
+            }
+            cursor.close();
+        }
+
+        // Change the sign to make it positive if it's a negative value
+        totalBalanceAccount = Math.abs(totalBalanceAccount);
+
+        // Close the database connection
+        db.close();
+
+        return totalBalanceAccount;
+    }
+
 
 }
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.project.moneymind.R;
+import com.project.moneymind.ViewModel.MainViewModel;
 import com.project.moneymind.adapters.category_adapter;
 import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.databinding.FragmentAddTransactionFragementBinding;
@@ -36,6 +38,8 @@ import com.project.moneymind.utils.constants;
 import com.project.moneymind.utils.helper;
 import com.project.moneymind.models.transaction;
 import com.project.moneymind.views.activties.accounts_page;
+import com.project.moneymind.views.activties.history_page;
+import com.project.moneymind.views.activties.home_page;
 
 
 import java.text.SimpleDateFormat;
@@ -50,7 +54,7 @@ String type,date,category,note,account;
 AlertDialog alertDialog;
 RadioGroup radioGroup;
 RadioButton radioButton;
-
+MainViewModel viewModel;
     int  amount;
     int Eamount;
     public AddTransactionFragement() {
@@ -73,11 +77,12 @@ RadioButton radioButton;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+        viewModel=new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         binding= FragmentAddTransactionFragementBinding.inflate(inflater);
         db=new DBHelper(requireContext());
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", MODE_PRIVATE);
-       int acc_id = sharedPreferences.getInt("account_id", -1);
-       int  user_id = sharedPreferences.getInt("user_id", -1);
+
 
        transactions=new transaction();
 
@@ -86,16 +91,28 @@ RadioButton radioButton;
             @Override
             public void onClick(View view) {
 
-                date=binding.Exdate.getText().toString();
+
               amount= Integer.parseInt(binding.Examount.getText().toString());
-                category=binding.Excategory.getText().toString();
+
                 note=binding.Exnote.getText().toString();
-                 account=binding.Exaccount.getText().toString();
-                double acbal=db.getAccountBalanceById(acc_id,user_id);
-                if(transactions.getType()==constants.Expense){
+                if (note == null) {
+                    transactions.setNote(" ");
+                }else{
+                transactions.setNote(note);}
+
+
+
+                if(transactions.getType().equals(constants.Expense)){
                     amount=amount*(-1);
+                    transactions.setAmount(amount);
+                }else{
+                    transactions.setAmount(amount);
                 }
-                db.insertExpense(acc_id,user_id,transactions.getType(),account,date,amount,category,note);
+
+                ((home_page) requireActivity()).viewModel.addTransactions(transactions);
+                ((home_page) requireActivity()).getTransaction();
+
+
                 Toast.makeText(getContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
@@ -135,6 +152,8 @@ RadioButton radioButton;
                         SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMMM yyyy");
 
                       String datetoshow= helper.formatdate(calendar.getTime());
+                      transactions.setDate(calendar.getTime());
+                      transactions.setId(calendar.getTime().getTime());
 
                         binding.Exdate.setText(datetoshow);
 
@@ -157,10 +176,13 @@ RadioButton radioButton;
                         @Override
                         public void oncategoryclicked(Category category) {
                             binding.Excategory.setText(category.getCategoryname());
+                            String cat=binding.Excategory.getText().toString();
+                            transactions.setCategory(cat);
                             categorydialog.dismiss();
                         }});
                     dialogBinding.recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
                     dialogBinding.recyclerview.setAdapter(categoryAdpater);
+
 
                     categorydialog.show();
 
@@ -187,6 +209,8 @@ RadioButton radioButton;
                         RadioButton radioButton = dialogView.findViewById(checkedId);
                         if (radioButton != null) {
                             binding.Exaccount.setText(radioButton.getText());
+                            String acc=binding.Exaccount.getText().toString();
+                            transactions.setAccount(acc);
                         }
                         alertDialog.dismiss();
                     }

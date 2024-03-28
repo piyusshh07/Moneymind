@@ -10,6 +10,15 @@ public class constants {
     public static  String Income="Income";
     public static  String Expense="Expense";
     public static ArrayList<Category> categories;
+    public static int DAILY=0;
+    public static int MONTHLY=1;
+    public static int CALENDER=2;
+    public static int SUMMARY=3;
+    public static int NOTES=4;
+
+    public static int SELECTED_TAB=0;
+    public static int SELECTED_TAB_STATS=0;
+    public  static String SELECTED_STATS_TYPE=constants.Income;
     public static void setcategories(){
         categories=new ArrayList<>();
         categories.add(new Category("Foods & drinks", R.drawable.restaurant_cat));
