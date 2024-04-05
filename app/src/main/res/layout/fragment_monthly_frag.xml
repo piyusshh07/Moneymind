@@ -6,6 +6,15 @@
         android:layout_height="match_parent"
         tools:context=".Monthly_frag">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/app_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"></ImageView>
+
         <LinearLayout
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"

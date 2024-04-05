@@ -26,6 +26,7 @@ import com.project.moneymind.database.DBHelper;
 import com.project.moneymind.databinding.ActivityHistoryPageBinding;
 import com.project.moneymind.models.transaction;
 import com.project.moneymind.utils.constants;
+import com.project.moneymind.utils.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class history_page extends AppCompatActivity {
         db = new DBHelper(this);
         calendar = Calendar.getInstance();
         updateDate();
+
         viepager_adapter_forlist adapter=new viepager_adapter_forlist(getSupportFragmentManager()) {
         };
 
@@ -58,10 +60,28 @@ public class history_page extends AppCompatActivity {
 
         binding.viewpagerforlist.setAdapter(adapter);
         binding.tabsforlist.setupWithViewPager(binding.viewpagerforlist);
+        binding.tabsforlist.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getText().equals("Daily")) {
+                    constants.SELECTED_TAB = constants.DAILY;
+                    updateDate();
+                    getTransaction();
+                } else  {
+                    constants.SELECTED_TAB = constants.MONTHLY;
+                    updateDate();
+                    getTransaction();
+                }
+            }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        int acc_id = sharedPreferences.getInt("account_id", -1);
-        int user_id = sharedPreferences.getInt("user_id", -1);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         binding.nextdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,39 +109,15 @@ public class history_page extends AppCompatActivity {
             }
         });
 
-        binding.tabsforlist.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("Daily")) {
-                    constants.SELECTED_TAB = constants.DAILY;
-                    updateDate();
-                    getTransaction();
-                } else if (tab.getText().equals("Monthly")) {
-                    constants.SELECTED_TAB = constants.MONTHLY;
-                    updateDate();
-                    getTransaction();
-                }
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-
-        // RecyclerView setup
-     //   ArrayList<transaction> transactions = db.fetch_transactions(acc_id, user_id);
-  //      transactions_adapter adapter = new transactions_adapter(this, transactions);
-       // binding.transactionList.setLayoutManager(new LinearLayoutManager(this));
-    //    binding.transactionList.setAdapter(adapter);
     }
 
     void updateDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy");
-        binding.date.setText(dateFormat.format(calendar.getTime()));
+        if( constants.SELECTED_TAB ==constants.DAILY) {
+            binding.date.setText(helper.formatdate(calendar.getTime()));
+        }else if(constants.SELECTED_TAB ==constants.MONTHLY){
+            binding.date.setText(helper.format_date_month(calendar.getTime()));
+        }
     }
 
     public void getTransaction() {

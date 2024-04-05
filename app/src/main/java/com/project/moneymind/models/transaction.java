@@ -77,8 +77,8 @@ public  transaction( ){
     public double getAmount() {
         return amount;
     }
-    public int getUser_id(){return user_id;};
-public int getAcid(){return acid;};
+    public static  int getUser_id(){return user_id;};
+public static int getAcid(){return acid;};
 
     public static long getId() {
         return id;

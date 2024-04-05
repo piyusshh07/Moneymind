@@ -22,7 +22,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/incomeBtn"
+                    android:id="@+id/Incomebtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -35,7 +35,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/expenseBtn"
+                    android:id="@+id/Expensebtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"

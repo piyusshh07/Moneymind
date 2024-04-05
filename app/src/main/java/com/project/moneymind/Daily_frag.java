@@ -62,7 +62,6 @@ public class Daily_frag extends Fragment {
             @Override
             public void onChanged(ArrayList<transaction> transactions) {
                 transactions_adapter adapter = new transactions_adapter(requireContext(), transactions);
-
                 binding.RecordList.setAdapter(adapter);
                 Log.d("transaction", String.valueOf(transactions));
             }

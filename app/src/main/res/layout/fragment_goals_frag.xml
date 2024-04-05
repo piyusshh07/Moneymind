@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Goals_frag"
     android:background="@color/black">
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.google.android.material.textfield.TextInputLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/goalCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="14dp">
+        app:cardBackgroundColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="Enter Goal name"
-            android:id="@+id/Goalname"
-            android:textColorHint="@color/blue"
-            android:textColor="@color/white"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="14dp">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:src="@drawable/house_cat" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="Enter Goal amount"
-            android:inputType="number"
-            android:id="@+id/Goal_amount"
-            android:textColor="@color/white"
-            android:textColorHint="@color/blue"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:padding="10dp"
+                android:text="Create and track your goals"
+                android:textColor="@color/black"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="14dp">
+                android:textSize="20sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                tools:layout_editor_absoluteY="0dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/Goaldate"
-            android:hint="Acheieve Goal till"
-            android:textColor="@color/white"
-            android:textColorHint="@color/blue"
-            android:clickable="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                tools:layout_editor_absoluteX="0dp"
+                tools:listitem="@layout/goals_list">
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btncurve"
-        android:text="Add Goal"
-        android:id="@+id/addGoalbtn"
-        android:layout_gravity="center"
-        android:layout_margin="50dp"
-        ></Button>
-</LinearLayout>
-</FrameLayout>
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/creategoaltext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="10dp"
+                android:text="Create a New Goal"
+                android:textColor="#050607"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.045"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,10 +25,10 @@ import java.util.Calendar;
 
 public class Monthly_frag extends Fragment {
 
-FragmentMonthlyFragBinding binding;
-Calendar calendar;
-DBHelper db;
-MainViewModel viewModel;
+    FragmentMonthlyFragBinding binding;
+    Calendar calendar;
+    DBHelper db;
+    MainViewModel viewModel;
 
     public Monthly_frag() {
         // Required empty public constructor
@@ -37,55 +37,52 @@ MainViewModel viewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        calendar = Calendar.getInstance();
+        constants.setcategories();
+        db = new DBHelper(requireContext());
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= FragmentMonthlyFragBinding.inflate(getLayoutInflater());
-        calendar = Calendar.getInstance();
-        constants.setcategories();
-        db = new DBHelper(requireContext());
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        binding = FragmentMonthlyFragBinding.inflate(inflater, container, false);
         binding.RecordListM.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         viewModel.transaction.observe(getViewLifecycleOwner(), new Observer<ArrayList<transaction>>() {
             @Override
             public void onChanged(ArrayList<transaction> transactions) {
-                transactions_adapter adapters = new transactions_adapter(requireContext(), transactions);
 
-                binding.RecordListM.setAdapter(adapters);
-                Log.d("transaction", String.valueOf(transactions));
-            }
+                    transactions_adapter adapters = new transactions_adapter(requireContext(), transactions);
+                    binding.RecordListM.setAdapter(adapters);
+                }
 
         });
+
         viewModel.totalIncome.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                binding.incomelabelM.setText(String.valueOf(aDouble));
-                Log.d("income", String.valueOf(viewModel.totalIncome));
+                requireActivity().runOnUiThread(() -> binding.incomelabelM.setText(String.valueOf(aDouble)));
             }
         });
 
         viewModel.totalExpense.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                binding.expenselabelM.setText(String.valueOf(aDouble));
-                Log.d("totalrx", String.valueOf(aDouble));
+                requireActivity().runOnUiThread(() -> binding.expenselabelM.setText(String.valueOf(aDouble)));
             }
         });
 
         viewModel.totalAccount.observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                binding.totallabelM.setText(String.valueOf(aDouble));
-                Log.d("Expense", String.valueOf(viewModel.totalAccount));
+                requireActivity().runOnUiThread(() -> binding.totallabelM.setText(String.valueOf(aDouble)));
             }
         });
+
         viewModel.getTransactions(calendar);
 
         return binding.getRoot();
     }
-    }
+}

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,11 +20,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.project.moneymind.ViewModel.MainViewModel;
+import com.project.moneymind.databinding.ActivityHomePageBinding;
 import com.project.moneymind.models.transaction;
 import com.project.moneymind.views.fragements.AddTransactionFragement;
 import com.project.moneymind.database.DBHelper;
@@ -38,15 +40,15 @@ public class home_page extends AppCompatActivity {
     CardView ac_bal , Expensecard , Budget_GoalsCard;
     String us ,nameuser ;
 
-    Integer acc_id,user_id ,acc_balance;
+    Integer acc_id,user_id ,acc_balance,bal;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     DBHelper db;
     FloatingActionButton fabtn;
      AlertDialog baldialog;
+ActivityHomePageBinding binding;
 
-    double ba;
 
 
 
@@ -73,6 +75,7 @@ public class home_page extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        binding = ActivityHomePageBinding.inflate(getLayoutInflater());
 
         ac_bal=findViewById(R.id.acbal_card);
         fname=findViewById(R.id.hellouser);
@@ -83,10 +86,27 @@ public class home_page extends AppCompatActivity {
         fabtn=findViewById(R.id.fab);
         Expensecard=findViewById(R.id.history);
         Budget_GoalsCard=findViewById(R.id.bud_goal);
+       CardView statscard=findViewById(R.id.charts);
+       statscard.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent stats=new Intent(home_page.this, Charts_activity.class);
+               startActivity(stats);
+           }
+       });
 
         transaction transactions=new transaction();
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        viewModel.setbalance();
+
+        viewModel.getbalance().observe(this, new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                balance.setText(viewModel.getbalance().toString());
+            }
+        });
         //sharedpreference code
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         acc_id = sharedPreferences.getInt("account_id", -1);
@@ -95,33 +115,21 @@ public class home_page extends AppCompatActivity {
 
         transactions.setAcid(acc_id);
         transactions.setUser_id(user_id);
-        Log.d("ids",String.valueOf(transactions.getAcid()));
-        Log.d("ids",String.valueOf(transactions.getUser_id()));
 
         Intent his_page=new Intent(home_page.this, history_page.class);
         db=new DBHelper(home_page.this);
+      int  ba= (int) db.getTotalAccountBalance(acc_id,user_id);
+      balance.setText(String.valueOf(ba));
 
-// Check if acc_id and user_id are correctly retrieved
-        Log.d("Debug", "acc_id: " + acc_id + ", user_id: " + user_id);
-
-// If acc_id and user_id are correct, use them to get account balance
-        if (acc_id != -1 && user_id != -1) {
-            acc_balance = (int) db.getAccountBalanceById(acc_id, user_id);
-
-        } else {
-            // Handle the case where acc_id or user_id is -1
-            Log.e("Error", "Invalid acc_id or user_id");
-        }
-
-
-
-        viewModel.totalAccountBalance.observe(this, new Observer<Double>() {
+       viewModel.totalAccountBalance.observe(this, new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                balance.setText(String.valueOf(aDouble));
-                Log.d("income", String.valueOf(viewModel.totalIncome));
+                bal = aDouble.intValue(); // Convert Double to int
+                balance.setText(String.valueOf(bal)); // Set the text of balance TextView
+                Log.d("totalbal", String.valueOf(viewModel.totalIncome));
             }
         });
+
         String name=db.getfname(user_id);
     fname.setText("Hello "+ name);
 
@@ -141,14 +149,10 @@ public class home_page extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itid=item.getItemId();
-
-                if (itid==R.id.abal_nav){
-                   baldialog.show();
-                } else if (itid==R.id.ex_history_nav) {
-                    Intent his=new Intent(home_page.this,history_page.class);
-                    startActivity(his);
-
+                if(itid==R.id.abal_nav){
+                    Toast.makeText(home_page.this,"account bal",Toast.LENGTH_SHORT).show();
                 }
+                drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });

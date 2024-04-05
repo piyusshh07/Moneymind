@@ -29,26 +29,23 @@
 
         </ImageView>
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12 Oct 2020"
-            android:layout_gravity="center_vertical"
-            android:translationX="80dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/black">
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="310dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="#1B1414"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        </TextView>
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/baseline_keyboard_arrow_right_24"
-            android:layout_marginLeft="140dp"
-            android:id="@+id/nextdate">
-
-        </ImageView>
+            <ImageView
+                android:id="@+id/nextdate"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/baseline_keyboard_arrow_right_24" />
 
         </LinearLayout>
 

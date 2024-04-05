@@ -119,20 +119,20 @@ MainViewModel viewModel;
         });
 
 
-        binding.incomeBtn.setOnClickListener(new View.OnClickListener() {
+        binding.Incomebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_income_selector));
-                binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
+                binding.Incomebtn.setBackground(getContext().getDrawable(R.drawable.default_income_selector));
+                binding.Expensebtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
                 transactions.setType(constants.Income);
             }
         });
 
-        binding.expenseBtn.setOnClickListener(new View.OnClickListener() {
+        binding.Expensebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_expense_selector));
-                binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
+                binding.Expensebtn.setBackground(getContext().getDrawable(R.drawable.default_expense_selector));
+                binding.Incomebtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
                 transactions.setType(constants.Expense);
             }
         });

@@ -29,6 +29,8 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
     private static final int max_acc=4;
     private int acc_counter=0;
     int userid;
+
+    String selected_acc;
     int ACC_ID;
     int accuserid;
     AlertDialog dialog ;
@@ -43,7 +45,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         SharedPreferences sharedPreferences =getSharedPreferences("User_Data",MODE_PRIVATE);
         fnameuser=sharedPreferences.getString("Username","user");
-        Log.d("fname",fnameuser);
+
 
         DBHelper db2=new DBHelper(accounts_page.this);
         userid=db2.getuserid(fnameuser);
@@ -57,7 +59,7 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viw, int position, long id) {
-                String selected_acc= adapter.getItem(position);
+                selected_acc= adapter.getItem(position);
                 ACC_ID = db2.getAccountId(selected_acc,userid);
 
                 if(ACC_ID<=0){
@@ -99,7 +101,8 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                alertDialog.show();
                return false;
-           }
+
+               }
        });
 
 
@@ -111,7 +114,14 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
                 alertDialog.dismiss();
             }
         });
-
+delete.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        db2.delete_account(selected_acc,userid);
+        alertDialog.dismiss();
+        finish();
+    }
+});
         Button create, cancel;
 
         AlertDialog.Builder builder=new AlertDialog.Builder(accounts_page.this);
@@ -129,15 +139,13 @@ public class accounts_page extends AppCompatActivity {private ListView listView;
 
         create.setOnClickListener(v -> {
             EditText acname_ed= view.findViewById(R.id.account_name_edittext);
-            EditText inamount=view.findViewById(R.id.initial_amount_edittext);
             String newaccname = acname_ed.getText().toString();
-            String initial_acbalance=inamount.getText().toString();
             Boolean check_acc = db2.checkAccountname(newaccname, userid );
             if (check_acc == true) {
                 Toast.makeText(accounts_page.this, "already exists", Toast.LENGTH_SHORT).show();
             } else {
                 if (!newaccname.isEmpty()) {
-                    db2.CreateAccount(userid, newaccname , Integer.valueOf(initial_acbalance));
+                    db2.CreateAccount(userid, newaccname);
                     accountnames.clear();
                     accountnames.addAll(db2.fetch_accnames(userid));
                     adapter.notifyDataSetChanged();

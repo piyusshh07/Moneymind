@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Daily_Stats"
+    >
+
+    <TextView
+        android:id="@+id/IncomebtnStats"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_weight="1"
+        android:background="@drawable/default_selector"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="Income"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="62dp" />
+
+    <TextView
+        android:id="@+id/ExpensebtnStats"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_weight="1"
+        android:background="@drawable/default_selector"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="Expense"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="62dp" />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/anychartViewDaily"
+        android:layout_width="match_parent"
+        android:layout_height="00dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ExpensebtnStats"
+        app:layout_constraintVertical_bias="0.096"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"></com.anychart.AnyChartView>
+
+    <ImageView
+        android:id="@+id/emptystate"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/vehicle_cat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

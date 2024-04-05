@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.activties.Charts_activity"
+    android:background="@color/black">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_keyboard_arrow_left_24"
+                android:id="@+id/prevdateStats">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/dateStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 Oct 2020"
+                android:layout_gravity="center_vertical"
+                android:translationX="80dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black">
+
+            </TextView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_keyboard_arrow_right_24"
+                android:layout_marginLeft="140dp"
+                android:id="@+id/nextdateStats">
+
+            </ImageView>
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/Tab_Stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/StatsViewPager1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints"></androidx.viewpager.widget.ViewPager>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
